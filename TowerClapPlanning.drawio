@@ -1,0 +1,51 @@
+<mxfile host="app.diagrams.net" modified="2023-08-31T16:34:58.112Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.62" etag="enf6aLWQFE6NhzWj9htd" version="21.7.1" type="device">
+  <diagram name="Page-1" id="cmq1UPrQhz5zJwo1KUap">
+    <mxGraphModel dx="1087" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zXElZDvhpllFaACzilFS-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="zXElZDvhpllFaACzilFS-11">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="359.9999999999998" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zXElZDvhpllFaACzilFS-1" value="TowerManager" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zXElZDvhpllFaACzilFS-5" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="zXElZDvhpllFaACzilFS-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="490" as="sourcePoint" />
+            <mxPoint x="480" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zXElZDvhpllFaACzilFS-6" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="zXElZDvhpllFaACzilFS-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="360" y="490" as="sourcePoint" />
+            <mxPoint x="300" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zXElZDvhpllFaACzilFS-7" value="TowerAIModeKilljoy&lt;br&gt;(TowerAIModeAbstract)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="510" y="460" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zXElZDvhpllFaACzilFS-8" value="TowerAIModeFlatteringSound&lt;br&gt;(TowerAIModeAbstract)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="460" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zXElZDvhpllFaACzilFS-9" value="TowerAIModeAbstract" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zXElZDvhpllFaACzilFS-10" value="UIControllPanel" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zXElZDvhpllFaACzilFS-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="zXElZDvhpllFaACzilFS-1" target="zXElZDvhpllFaACzilFS-11">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="359.9999999999998" y="570" as="targetPoint" />
+            <mxPoint x="360" y="420" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zXElZDvhpllFaACzilFS-11" value="TowerAIModeSO" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="460" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
