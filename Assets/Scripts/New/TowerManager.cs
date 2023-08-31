@@ -20,7 +20,7 @@ public class TowerManager : MonoBehaviour
     [SerializeField] private List<TowerAIModule> m_towerAIModuleList;
 
     [SerializeField] private Transform m_shootingPoint;
-    [SerializeField] private GameObject m_projectilePrefab;
+    [SerializeField] private Rigidbody m_projectilePrefab;
     [SerializeField] private LayerMask m_targetLayerMask;
 
     [Header("Cannon Model Referencing")]
@@ -42,6 +42,9 @@ public class TowerManager : MonoBehaviour
     private float m_lastTimeCheckedInterval = 60/5;
     private Vector3 m_preferablePosition = Vector3.zero;
 
+    private float m_fireProjectileCooldown = 2f;
+    private float m_fireProjectileLastTime = 0f;
+
     private void Start()
     {
         m_state = TowerState.Paused;
@@ -52,12 +55,22 @@ public class TowerManager : MonoBehaviour
     {
         if (m_lastTimeChecked > Time.time - m_lastTimeCheckedInterval)
         {
-            m_preferablePosition = GetCurrentActiveAIModule().towerMode.CalculateTargetingPosition();
+            m_preferablePosition = GetCurrentActiveAIModule().towerMode.CalculateTargetingPosition(m_shootingPoint.position, projectileAcceleration);
         }
         if (m_preferablePosition != m_shootingPoint.forward)
         {
-
+            m_shootingPoint.LookAt(m_preferablePosition);
+            if (m_fireProjectileLastTime < Time.time - m_fireProjectileCooldown)
+            {
+                Rigidbody B = (Rigidbody)Instantiate(m_projectilePrefab, transform.position, transform.rotation);
+                B.velocity = transform.forward * m_projectileAcceleration;
+            }
         }
+    }
+
+    private void Fire()
+    {
+
     }
 
     public TowerAIModule GetCurrentActiveAIModule()
