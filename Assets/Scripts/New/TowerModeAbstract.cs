@@ -11,10 +11,13 @@ public abstract class TowerModeAbstract : MonoBehaviour
     }
 
     private State m_state;
-    private Vector3 m_preferablePosition;
+    protected Transform m_target;
 
-    protected abstract void CalculateTargetingPosition();
+    public abstract Vector3 CalculateTargetingPosition(Vector3 aTargetPos, Vector3 aTargetSpeed, Vector3 aInterceptorPos, float aInterceptorSpeed);
 
-    protected abstract void FindTarget();
+    protected virtual void FindTarget()
+    {
+
+    }
 
 }
