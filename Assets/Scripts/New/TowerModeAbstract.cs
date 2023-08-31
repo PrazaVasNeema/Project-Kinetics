@@ -26,7 +26,10 @@ public abstract class TowerModeAbstract : MonoBehaviour
     {
         if (Time.frameCount % 5 ==0)
         {
-            FindTarget();
+            if (m_target == null)
+            {
+                FindTarget();
+            }
         }
     }
 

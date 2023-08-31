@@ -28,11 +28,12 @@ public class TowerManager : MonoBehaviour
     [SerializeField] private GameObject m_cannonVerticalTurning;
 
     [SerializeField] private GameObject m_cube;
+    [SerializeField] private float enemySpeed;
 
     private TowerState m_state;
     private float m_projectileGravity;
     public float projectileGravity => m_projectileGravity;
-    private float m_projectileAcceleration = 100;
+    [SerializeField] private float m_projectileAcceleration = 100;
     public float projectileAcceleration => m_projectileAcceleration;
     private float m_cannonTurningSpeedHorizontal;
     public float cannonTurningSpeedHorizontal => m_cannonTurningSpeedHorizontal;
