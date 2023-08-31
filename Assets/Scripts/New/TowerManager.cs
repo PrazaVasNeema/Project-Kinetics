@@ -27,10 +27,12 @@ public class TowerManager : MonoBehaviour
     [SerializeField] private GameObject m_cannonHorizontalTurning;
     [SerializeField] private GameObject m_cannonVerticalTurning;
 
+    [SerializeField] private GameObject m_cube;
+
     private TowerState m_state;
     private float m_projectileGravity;
     public float projectileGravity => m_projectileGravity;
-    private float m_projectileAcceleration;
+    private float m_projectileAcceleration = 100;
     public float projectileAcceleration => m_projectileAcceleration;
     private float m_cannonTurningSpeedHorizontal;
     public float cannonTurningSpeedHorizontal => m_cannonTurningSpeedHorizontal;
@@ -39,7 +41,7 @@ public class TowerManager : MonoBehaviour
     private int m_currentActiveTowerAIModuleID;
 
     private float m_lastTimeChecked;
-    private float m_lastTimeCheckedInterval = 60/5;
+    private float m_lastTimeCheckedInterval = 5/60;
     private Vector3 m_preferablePosition = Vector3.zero;
 
     private float m_fireProjectileCooldown = 2f;
@@ -49,12 +51,21 @@ public class TowerManager : MonoBehaviour
     {
         m_state = TowerState.Paused;
         m_lastTimeChecked = Time.time;
+        foreach (TowerAIModule towerAIModule in m_towerAIModuleList)
+        {
+            towerAIModule.towerMode.SetTargetLayerMask(m_targetLayerMask);
+            towerAIModule.enabled = false;
+        }
+        Debug.Log(m_towerAIModuleList.Count);
+        m_currentActiveTowerAIModuleID = 0;
+        m_towerAIModuleList[m_currentActiveTowerAIModuleID].enabled = true;
     }
 
     private void FixedUpdate()
     {
-        if (m_lastTimeChecked > Time.time - m_lastTimeCheckedInterval)
+        if (m_lastTimeChecked < Time.time - m_lastTimeCheckedInterval)
         {
+            m_lastTimeChecked = Time.time;
             m_preferablePosition = GetCurrentActiveAIModule().towerMode.CalculateTargetingPosition(m_shootingPoint.position, projectileAcceleration);
         }
         if (m_preferablePosition != m_shootingPoint.forward)
@@ -62,10 +73,12 @@ public class TowerManager : MonoBehaviour
             m_shootingPoint.LookAt(m_preferablePosition);
             if (m_fireProjectileLastTime < Time.time - m_fireProjectileCooldown)
             {
-                Rigidbody B = (Rigidbody)Instantiate(m_projectilePrefab, transform.position, transform.rotation);
-                B.velocity = transform.forward * m_projectileAcceleration;
+                Rigidbody B = (Rigidbody)Instantiate(m_projectilePrefab, m_shootingPoint.position, m_shootingPoint.rotation);
+                B.velocity = m_shootingPoint.forward * m_projectileAcceleration;
+                m_fireProjectileLastTime = Time.time;
             }
         }
+        m_cube.transform.position = m_preferablePosition;
     }
 
     private void Fire()

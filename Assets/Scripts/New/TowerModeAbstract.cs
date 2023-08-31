@@ -17,12 +17,12 @@ public abstract class TowerModeAbstract : MonoBehaviour
     protected Transform m_target = null;
     protected LayerMask m_targetLayerMask;
 
-    public TowerModeAbstract(LayerMask targetLayerMask)
+    public virtual void SetTargetLayerMask(LayerMask targetLayerMask)
     {
         m_targetLayerMask = targetLayerMask;
     }
 
-    private void Update()
+    protected void Update()
     {
         if (Time.frameCount % 5 ==0)
         {
@@ -35,7 +35,7 @@ public abstract class TowerModeAbstract : MonoBehaviour
     protected virtual void FindTarget()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, m_detectionRadius, m_targetLayerMask);
-        m_target = hitColliders[0].transform;
+        m_target = hitColliders.Length>0 ? hitColliders[0].transform : null;
     }
 
 }
