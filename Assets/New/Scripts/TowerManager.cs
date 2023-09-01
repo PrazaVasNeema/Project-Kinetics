@@ -13,12 +13,6 @@ namespace TestJob
             Paused,
         }
 
-        public enum CannonState
-        {
-            Mo,
-            Paused,
-        }
-
         [Header("Logics")]
         [SerializeField] private List<TowerAIModule> m_towerAIModuleList;
 
@@ -31,8 +25,6 @@ namespace TestJob
         [SerializeField] private GameObject m_cannonVerticalTurning;
 
         [SerializeField] private GameObject m_cube;
-        [SerializeField] private Rigidbody m_cube2;
-        [SerializeField] private float enemySpeed;
 
         private TowerState m_state;
         private float m_projectileGravity;
@@ -46,7 +38,7 @@ namespace TestJob
         private int m_currentActiveTowerAIModuleID;
 
         private float m_lastTimeChecked;
-        private float m_lastTimeCheckedInterval = 5 / 60;
+        private float m_lastTimeCheckedInterval = 1 / 60;
         private Vector3 m_preferablePosition = Vector3.zero;
 
         private float m_fireProjectileCooldown = 2f;

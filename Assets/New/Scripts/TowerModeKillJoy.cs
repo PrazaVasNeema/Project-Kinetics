@@ -8,7 +8,6 @@ namespace TestJob
 
     public class TowerModeKillJoy : TowerModeAbstract
     {
-        [SerializeField] Rigidbody cube;
 
         private Vector3 m_targetsMovingVector;
         private Vector3[] m_targetsPositions = { Vector3.zero, Vector3.zero };

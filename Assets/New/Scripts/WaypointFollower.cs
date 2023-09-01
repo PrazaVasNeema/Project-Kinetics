@@ -12,11 +12,11 @@ namespace TestJob
         {
             public Transform transform;
             public Vector3 initialPositionAccordingCentroid;
-
+            public float initialY;
         }    
 
         [SerializeField] private Transform m_waypointsParent;
-        [SerializeField] private Transform m_object;
+        [SerializeField] private Rigidbody m_object;
         [SerializeField] private Transform m_centroidVisual;
 
         private float m_objectSpeed;
@@ -45,25 +45,29 @@ namespace TestJob
             m_centroidVisual.position = m_centroid;
             foreach (WaypointData waypointData in m_waypointDataList)
             {
-                waypointData.initialPositionAccordingCentroid = waypointData.transform.position - m_centroid;
+                Vector3 centroudWithoytY = new Vector3(m_centroid.x, 0f, m_centroid.z);
+                waypointData.initialPositionAccordingCentroid = waypointData.transform.position - centroudWithoytY;
+                waypointData.initialY = waypointData.transform.position.y;
             }
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            if ((m_object.position - m_waypointDataList[m_currentWaypointIndex].transform.position).sqrMagnitude < 4f)
+            if ((m_object.position - m_waypointDataList[m_currentWaypointIndex].transform.position).sqrMagnitude < 1f)
             {
                 m_currentWaypointIndex = ++m_currentWaypointIndex % m_waypointDataList.Count == 0 ? 0 : m_currentWaypointIndex;
             }
-            float t = Time.deltaTime * m_objectSpeed;
-            m_object.position = Vector3.MoveTowards(transform.position, m_waypointDataList[m_currentWaypointIndex].transform.position, t);
+            float t = Time.fixedDeltaTime * m_objectSpeed;
+            m_object.position = Vector3.MoveTowards(m_object.position, m_waypointDataList[m_currentWaypointIndex].transform.position, t);
+            //m_object.velocity = (m_waypointDataList[m_currentWaypointIndex].transform.position - m_object.position) * Time.fixedDeltaTime * m_objectSpeed;
         }
 
         private void SetNewWaypointsPositions()
         {
             foreach(WaypointData waypointData in m_waypointDataList)
             {
-                waypointData.transform.position = waypointData.initialPositionAccordingCentroid * m_objectSpeed * m_speedWeight;
+                Vector3 newe = waypointData.initialPositionAccordingCentroid* m_objectSpeed *m_speedWeight;
+                waypointData.transform.position = new Vector3(newe.x, waypointData.initialY, newe.z);
             }
         }
 

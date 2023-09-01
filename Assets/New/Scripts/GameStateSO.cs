@@ -23,7 +23,7 @@ namespace TestJob
         public GameStateData GetGameStateData()
         {
             return m_gameStateData;
-        }    
+        }     
     }
 
     [System.Serializable]
