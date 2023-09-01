@@ -17,12 +17,11 @@ namespace TestJob
 
         [SerializeField] private Transform m_waypointsParent;
         [SerializeField] private Rigidbody m_object;
-        [SerializeField] private Transform m_centroidVisual;
+        [SerializeField] private Transform m_centroid;
 
         private float m_objectSpeed;
         private List<WaypointData> m_waypointDataList;
         private int m_currentWaypointIndex;
-        private Vector3 m_centroid;
         private float m_speedWeight = .1f;
 
         public void SetParams(float speed)
@@ -41,11 +40,10 @@ namespace TestJob
                 waypointData.transform = waypoint;
                 m_waypointDataList.Add(waypointData);
             }
-            m_centroid = MathAuxStatic.CalculateCentroid(m_waypointsParent);
-            m_centroidVisual.position = m_centroid;
+            m_centroid.position = MathAuxStatic.CalculateCentroid(m_waypointsParent);
             foreach (WaypointData waypointData in m_waypointDataList)
             {
-                Vector3 centroudWithoytY = new Vector3(m_centroid.x, 0f, m_centroid.z);
+                Vector3 centroudWithoytY = new Vector3(m_centroid.position.x, 0f, m_centroid.position.z);
                 waypointData.initialPositionAccordingCentroid = waypointData.transform.position - centroudWithoytY;
                 waypointData.initialY = waypointData.transform.position.y;
             }
