@@ -7,12 +7,6 @@ namespace TestJob
 
     public class TowerManager : MonoBehaviour
     {
-        public enum TowerState
-        {
-            Active,
-            Paused,
-        }
-
         [Header("Logics")]
         [SerializeField] private List<TowerAIModule> m_towerAIModuleList;
 
@@ -26,7 +20,6 @@ namespace TestJob
 
         [SerializeField] private GameObject m_cube;
 
-        private TowerState m_state;
         private float m_projectileGravity;
         public float projectileGravity => m_projectileGravity;
         [SerializeField] private float m_projectileAcceleration = 100;
@@ -53,7 +46,6 @@ namespace TestJob
 
         private void Start()
         {
-            m_state = TowerState.Paused;
             m_lastTimeChecked = Time.time;
             foreach (TowerAIModule towerAIModule in m_towerAIModuleList)
             {
@@ -226,11 +218,6 @@ namespace TestJob
         public TowerAIModule GetCurrentActiveAIModule()
         {
             return m_towerAIModuleList[m_currentActiveTowerAIModuleID];
-        }
-
-        public void SetTowerState(TowerState state)
-        {
-            m_state = state;
         }
 
         public bool SetProjectileGravity(float gravity)
