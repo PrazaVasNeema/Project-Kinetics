@@ -96,7 +96,6 @@ namespace TestJob
 
 
             m_cube.transform.position = m_preferablePosition;
-            m_cube2.velocity = new Vector3(0f, 0f, enemySpeed * Time.fixedDeltaTime);
         }
 
         private void Fire()

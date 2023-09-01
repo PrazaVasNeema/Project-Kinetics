@@ -13,6 +13,8 @@ namespace TestJob
         [SerializeField] private TowerManager m_towerManager;
         // [SerializeField] private TowerManager m_target;
         [SerializeField] private GameStateSO m_gameStateSO;
+        [SerializeField] private WaypointFollower m_waypointFollower;
+
         public GameStateSO gameStateSO => m_gameStateSO;
 
 
@@ -35,12 +37,15 @@ namespace TestJob
             GameStateData gameStateData = m_gameStateSO.GetGameStateData();
             m_towerManager.SetParams(gameStateData.towerTurningSpeedHorizontal, gameStateData.towerTurningSpeedVertical, gameStateData.towerProjectileSpeed);
             m_uiLevelControlPanel.SetParams(gameStateData);
+            m_waypointFollower.SetParams(gameStateData.targetSpeed);
+
             m_uiLevelControlPanel.OnGameParamsChanged += M_uiLevelControlPanel_OnGameParamsChanged;
         }
 
         private void M_uiLevelControlPanel_OnGameParamsChanged(object sender, UILevelControlPanel.OnGameParamsChangedArgs e)
         {
             m_towerManager.SetParams(e.gameStateData.towerTurningSpeedHorizontal, e.gameStateData.towerTurningSpeedVertical, e.gameStateData.towerProjectileSpeed);
+            m_waypointFollower.SetParams(e.gameStateData.targetSpeed);
         }
     }
 
