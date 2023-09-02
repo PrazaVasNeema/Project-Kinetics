@@ -8,6 +8,8 @@ namespace TestJob
     public class WaypointFollower : MonoBehaviour
     {
 
+        private const float WAYPOINT_VECTOR_CHANGE_MULTIPLIER = .1f;
+
         private class WaypointData
         {
             public Transform transform;
@@ -21,7 +23,6 @@ namespace TestJob
         private float m_objectSpeed;
         private List<WaypointData> m_waypointDataList;
         private int m_currentWaypointIndex;
-        private float m_speedWeight = .1f;
 
         public void SetParams(float speed)
         {
@@ -61,7 +62,7 @@ namespace TestJob
         {
             foreach(WaypointData waypointData in m_waypointDataList)
             {
-                waypointData.transform.position = MathAuxStatic.CalculateRelativeVectorChange(waypointData.initialPositionAccordingCentroid, m_objectSpeed * m_speedWeight, MathAuxStatic.Axis.Y);
+                waypointData.transform.position = MathAuxStatic.CalculateRelativeVectorChange(waypointData.initialPositionAccordingCentroid, m_objectSpeed * WAYPOINT_VECTOR_CHANGE_MULTIPLIER, MathAuxStatic.Axis.Y);
             }
         }
     }

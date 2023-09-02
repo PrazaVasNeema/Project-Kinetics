@@ -16,12 +16,7 @@ namespace TestJob
         public TowerManager towerManager => m_towerManager;
         [SerializeField] private GameStateSO m_gameStateSO;
         [SerializeField] private WaypointFollower m_waypointFollower;
-        [SerializeField] private CinemachineVirtualCamera[] m_virtualCameraArray;
-
-        private int m_currentVirtualCameraIndex;
-        private Vector3 m_virtualCameraInitialPositionAccordingToCenter;
-        private float m_speedWeight = .15f;
-
+        [SerializeField] private CameraController m_cameraController;
 
         private void Awake()
         {
@@ -44,10 +39,8 @@ namespace TestJob
             m_uiLevelControlPanel.SetParams(gameStateData);
             m_waypointFollower.SetParams(gameStateData.targetSpeed);
 
-            m_currentVirtualCameraIndex = gameStateData.cameraMode;
-            m_virtualCameraInitialPositionAccordingToCenter = m_virtualCameraArray[m_currentVirtualCameraIndex].transform.position;
-            ChangeCameraTransform(gameStateData.targetSpeed);
-            SetCurrentCamera(gameStateData.cameraMode);
+            m_cameraController.SetParams(gameStateData.cameraMode);
+            m_cameraController.ChangeMainCameraTransform(gameStateData.targetSpeed);
 
             m_uiLevelControlPanel.OnGameParamsChanged += M_uiLevelControlPanel_OnGameParamsChanged;
         }
@@ -57,24 +50,12 @@ namespace TestJob
             m_towerManager.SetParams(e.gameStateData.towerTurningSpeedHorizontal, e.gameStateData.towerTurningSpeedVertical, e.gameStateData.towerProjectileSpeed, e.gameStateData.towerFireRate, e.gameStateData.towerAIMode);
             m_waypointFollower.SetParams(e.gameStateData.targetSpeed);
 
-            ChangeCameraTransform(e.gameStateData.targetSpeed);
-            SetCurrentCamera(e.gameStateData.cameraMode);
+            m_cameraController.SetParams(e.gameStateData.cameraMode);
+            m_cameraController.ChangeMainCameraTransform(e.gameStateData.targetSpeed);
 
             m_waypointFollower.enabled = e.gameStateData.towerAIMode == 0 ? true : false;
         }
 
-        private void ChangeCameraTransform(float speed)
-        {
-            //m_virtualCameraArray[m_currentVirtualCameraIndex].transform.position = m_virtualCameraInitialPositionAccordingToCenter * speed * m_speedWeight;
-            m_virtualCameraArray[m_currentVirtualCameraIndex].transform.position = MathAuxStatic.CalculateRelativeVectorChange(m_virtualCameraInitialPositionAccordingToCenter, speed * m_speedWeight, MathAuxStatic.Axis.None);
-        }    
-
-        private void SetCurrentCamera(int cameraMode)
-        {
-            m_virtualCameraArray[m_currentVirtualCameraIndex].Priority = 10;
-            m_currentVirtualCameraIndex = cameraMode;
-            m_virtualCameraArray[m_currentVirtualCameraIndex].Priority = 20;
-        }
     }
 
 }
