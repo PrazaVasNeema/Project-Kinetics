@@ -12,11 +12,10 @@ namespace TestJob
         {
             public Transform transform;
             public Vector3 initialPositionAccordingCentroid;
-            public float initialY;
         }    
 
         [SerializeField] private Transform m_waypointsParent;
-        [SerializeField] private Rigidbody m_object;
+        [SerializeField] private Rigidbody m_objectToMove;
         [SerializeField] private Transform m_centroid;
 
         private float m_objectSpeed;
@@ -45,19 +44,17 @@ namespace TestJob
             {
                 Vector3 centroudWithoytY = new Vector3(m_centroid.position.x, 0f, m_centroid.position.z);
                 waypointData.initialPositionAccordingCentroid = waypointData.transform.position - centroudWithoytY;
-                waypointData.initialY = waypointData.transform.position.y;
             }
         }
 
         private void FixedUpdate()
         {
-            if ((m_object.position - m_waypointDataList[m_currentWaypointIndex].transform.position).sqrMagnitude < 1f)
+            if ((m_objectToMove.position - m_waypointDataList[m_currentWaypointIndex].transform.position).sqrMagnitude < 1f)
             {
                 m_currentWaypointIndex = ++m_currentWaypointIndex % m_waypointDataList.Count == 0 ? 0 : m_currentWaypointIndex;
             }
             float t = Time.fixedDeltaTime * m_objectSpeed;
-            m_object.position = Vector3.MoveTowards(m_object.position, m_waypointDataList[m_currentWaypointIndex].transform.position, t);
-            //m_object.velocity = (m_waypointDataList[m_currentWaypointIndex].transform.position - m_object.position) * Time.fixedDeltaTime * m_objectSpeed;
+            m_objectToMove.position = Vector3.MoveTowards(m_objectToMove.position, m_waypointDataList[m_currentWaypointIndex].transform.position, t);
         }
 
         private void SetNewWaypointsPositions()
@@ -65,13 +62,8 @@ namespace TestJob
             foreach(WaypointData waypointData in m_waypointDataList)
             {
                 waypointData.transform.position = MathAuxStatic.CalculateRelativeVectorChange(waypointData.initialPositionAccordingCentroid, m_objectSpeed * m_speedWeight, MathAuxStatic.Axis.Y);
-                //Vector3 newe = waypointData.initialPositionAccordingCentroid* m_objectSpeed *m_speedWeight;
-                //waypointData.transform.position = new Vector3(newe.x, waypointData.initialY, newe.z);
             }
         }
-
-
-
     }
 
 }

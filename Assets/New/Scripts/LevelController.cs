@@ -65,7 +65,8 @@ namespace TestJob
 
         private void ChangeCameraTransform(float speed)
         {
-            m_virtualCameraArray[m_currentVirtualCameraIndex].transform.position = m_virtualCameraInitialPositionAccordingToCenter * speed * m_speedWeight;
+            //m_virtualCameraArray[m_currentVirtualCameraIndex].transform.position = m_virtualCameraInitialPositionAccordingToCenter * speed * m_speedWeight;
+            m_virtualCameraArray[m_currentVirtualCameraIndex].transform.position = MathAuxStatic.CalculateRelativeVectorChange(m_virtualCameraInitialPositionAccordingToCenter, speed * m_speedWeight, MathAuxStatic.Axis.None);
         }    
 
         private void SetCurrentCamera(int cameraMode)
