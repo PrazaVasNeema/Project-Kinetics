@@ -9,6 +9,7 @@ namespace TestJob
 
     public class TowerModeFlatteringSound : TowerModeAbstract
     {
+        [SerializeField] private bool m_isLow;
 
         private Vector3 m_targetsMovingVector;
         private Vector3[] m_targetsPositions = { Vector3.zero, Vector3.zero };
@@ -18,7 +19,7 @@ namespace TestJob
         {
             if (m_target != null)
             {
-                float? angle = CalculateAngle(aInterceptorPos, aInterceptorSpeed, false);
+                float? angle = CalculateAngle(aInterceptorPos, aInterceptorSpeed, m_isLow);
                 if (angle != null)
                 {
                     Vector3 newVector = new Vector3(m_target.transform.position.x, aInterceptorPos.y, m_target.transform.position.z);
@@ -104,7 +105,6 @@ namespace TestJob
         // Start is called before the first frame update
         void Start()
         {
-            Debug.Log("fdgfg");
             //m_targetsPositions = new Vector3[2];
             StartCoroutine(CheckTargetsSpeedCo());
         }
