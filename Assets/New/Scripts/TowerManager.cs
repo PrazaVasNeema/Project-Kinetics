@@ -8,7 +8,7 @@ namespace TestJob
     public class TowerManager : MonoBehaviour
     {
         [Header("Logics")]
-        [SerializeField] private List<TowerAIModule> m_towerAIModuleList;
+        [SerializeField] private List<TowerModeAbstract> m_towerModeList;
 
         [SerializeField] private Transform m_shootingPoint;
         [SerializeField] private Rigidbody m_projectilePrefab;
@@ -27,7 +27,7 @@ namespace TestJob
         public float cannonTurningSpeedHorizontal => m_cannonTurningSpeedHorizontal;
         private float m_cannonTurningSpeedVertical;
         public float cannonTurningSpeedVertical => m_cannonTurningSpeedVertical;
-        private int m_currentActiveTowerAIModuleID;
+        private int m_currentActiveTowerAIModeID;
 
         private float m_lastTimeChecked;
         private float m_lastTimeCheckedInterval = 1 / 60;
@@ -36,24 +36,28 @@ namespace TestJob
         private float m_fireProjectileCooldown = 2f;
         private float m_fireProjectileLastTime = 0f;
 
-        public void SetParams(float cannonTurningSpeedHorizontal, float cannonTurningSpeedVertical, float projectileAcceleration, float towerFireRate)
+        public void SetParams(float cannonTurningSpeedHorizontal, float cannonTurningSpeedVertical, float projectileAcceleration, float towerFireRate, int activeAIMode)
         {
             m_cannonTurningSpeedHorizontal = cannonTurningSpeedHorizontal;
             m_cannonTurningSpeedVertical = cannonTurningSpeedVertical;
             m_projectileAcceleration = projectileAcceleration;
             m_fireProjectileCooldown = 1 / towerFireRate;
+
+            m_towerModeList[m_currentActiveTowerAIModeID].enabled = false;
+            m_currentActiveTowerAIModeID = activeAIMode;
+            m_towerModeList[m_currentActiveTowerAIModeID].enabled = true;
         }
 
-        private void Start()
+        private void Awake()
         {
             m_lastTimeChecked = Time.time;
-            foreach (TowerAIModule towerAIModule in m_towerAIModuleList)
+            foreach (TowerModeAbstract towerMode in m_towerModeList)
             {
-                towerAIModule.towerMode.SetTargetLayerMask(m_targetLayerMask);
-                towerAIModule.enabled = false;
+                towerMode.SetTargetLayerMask(m_targetLayerMask);
+                towerMode.enabled = false;
             }
-            m_currentActiveTowerAIModuleID = 0;
-            m_towerAIModuleList[m_currentActiveTowerAIModuleID].enabled = true;
+            //m_currentActiveTowerAIModuleID = 0;
+            //m_towerModeList[m_currentActiveTowerAIModuleID].enabled = true;
         }
 
         private void FixedUpdate()
@@ -61,7 +65,7 @@ namespace TestJob
             if (m_lastTimeChecked < Time.time - m_lastTimeCheckedInterval)
             {
                 m_lastTimeChecked = Time.time;
-                m_preferablePosition = GetCurrentActiveAIModule().towerMode.CalculateTargetingPosition(m_shootingPoint.position, projectileAcceleration);
+                m_preferablePosition = GetCurrentActiveAIModule().CalculateTargetingPosition(m_shootingPoint.position, projectileAcceleration);
             }
             if (!(RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, m_preferablePosition, 2) || RotateObjectTowardsTarget(m_cannonVerticalTurning.transform, m_preferablePosition, 1)))
             {
@@ -164,9 +168,9 @@ namespace TestJob
             return true;
         }
 
-        public TowerAIModule GetCurrentActiveAIModule()
+        public TowerModeAbstract GetCurrentActiveAIModule()
         {
-            return m_towerAIModuleList[m_currentActiveTowerAIModuleID];
+            return m_towerModeList[m_currentActiveTowerAIModeID];
         }
     }
 

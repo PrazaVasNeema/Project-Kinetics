@@ -22,13 +22,15 @@ namespace TestJob
         [SerializeField] private Slider m_targetSpeedSlider;
         [SerializeField] private Slider m_towerFireRateSlider;
         [SerializeField] private TMP_Dropdown m_cameraModeDropdown;
-
-        private TowerManager m_currentSelectedTower;
+        [SerializeField] private TMP_Dropdown m_towerAIModeDropdown;
+        [SerializeField] private TMP_Text m_towerAIModeText;
+        [SerializeField] private string[] m_towerAIModeDescritpions;
 
         public void OnChangeParamsFun()
         {
             GameStateData gameStateData = new GameStateData(m_towerTurningSpeedHorizontalSlider.value, m_towerTurningSpeedVerticalSlider.value, 
-                m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value, m_towerFireRateSlider.value, m_cameraModeDropdown.value);
+                m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value, m_towerFireRateSlider.value, m_cameraModeDropdown.value, m_towerAIModeDropdown.value);
+            m_towerAIModeText.text = m_towerAIModeDescritpions[gameStateData.towerAIMode];
 
             OnGameParamsChanged?.Invoke(this, new OnGameParamsChangedArgs
             {
@@ -46,6 +48,8 @@ namespace TestJob
             m_targetSpeedSlider.value = gameStateData.targetSpeed;
             m_towerFireRateSlider.value = gameStateData.towerFireRate;
             m_cameraModeDropdown.value = gameStateData.cameraMode;
+            m_towerAIModeDropdown.value = gameStateData.towerAIMode;
+            m_towerAIModeText.text = m_towerAIModeDescritpions[gameStateData.towerAIMode];
         }
     }
 
