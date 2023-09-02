@@ -46,6 +46,7 @@ namespace TestJob
             m_towerModeList[m_currentActiveTowerAIModeID].enabled = false;
             m_currentActiveTowerAIModeID = activeAIMode;
             m_towerModeList[m_currentActiveTowerAIModeID].enabled = true;
+            m_projectilePrefab.useGravity = activeAIMode == 0 ? false : true;
         }
 
         private void Awake()

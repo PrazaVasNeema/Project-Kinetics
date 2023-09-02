@@ -60,6 +60,8 @@ namespace TestJob
 
             ChangeCameraTransform(e.gameStateData.targetSpeed);
             SetCurrentCamera(e.gameStateData.cameraMode);
+
+            m_waypointFollower.enabled = e.gameStateData.towerAIMode == 0 ? true : false;
         }
 
         private void ChangeCameraTransform(float speed)
