@@ -13,6 +13,7 @@ namespace TestJob
 
         [SerializeField] private UILevelControlPanel m_uiLevelControlPanel;
         [SerializeField] private TowerManager m_towerManager;
+        public TowerManager towerManager => m_towerManager;
         // [SerializeField] private TowerManager m_target;
         [SerializeField] private GameStateSO m_gameStateSO;
         public GameStateSO gameStateSO => m_gameStateSO;

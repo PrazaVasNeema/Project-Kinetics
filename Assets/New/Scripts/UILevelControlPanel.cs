@@ -25,6 +25,17 @@ namespace TestJob
         [SerializeField] private TMP_Dropdown m_towerAIModeDropdown;
         [SerializeField] private TMP_Text m_towerAIModeText;
         [SerializeField] private string[] m_towerAIModeDescritpions;
+        [SerializeField] private GameObject m_cantShootAlert;
+
+        private void Start()
+        {
+            LevelController.Instance.towerManager.OnTargetingNotPossibleCheck += TowerManager_OnCantShoot;
+        }
+
+        private void TowerManager_OnCantShoot(object sender, bool e)
+        {
+            m_cantShootAlert.SetActive(!e);
+        }
 
         public void OnChangeParamsFun()
         {

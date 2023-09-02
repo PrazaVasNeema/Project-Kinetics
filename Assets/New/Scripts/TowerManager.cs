@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ namespace TestJob
 
     public class TowerManager : MonoBehaviour
     {
+        public event EventHandler<bool> OnTargetingNotPossibleCheck;
+
         [Header("Logics")]
         [SerializeField] private List<TowerModeAbstract> m_towerModeList;
 
@@ -62,7 +65,7 @@ namespace TestJob
             //m_towerModeList[m_currentActiveTowerAIModuleID].enabled = true;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (m_lastTimeChecked < Time.time - m_lastTimeCheckedInterval)
             {
@@ -83,12 +86,14 @@ namespace TestJob
                 }
                 //m_shootingPoint.transform.LookAt((Vector3)m_preferablePosition);
 
-                if (m_canShoot && m_fireProjectileLastTime < Time.time - m_fireProjectileCooldown)
-                {
-                    Fire();
-                }
+                if (m_canShoot)
+                    if (m_fireProjectileLastTime < Time.time - m_fireProjectileCooldown)
+                    {
+                        Fire();
+                    }
                 m_targetAim.transform.position = (Vector3)m_preferablePosition;
             }
+            OnTargetingNotPossibleCheck?.Invoke(this, m_preferablePosition != null);
 
         }
 
@@ -136,7 +141,7 @@ namespace TestJob
 
             float angle = Mathf.Acos(dot / (tF.magnitude * fD.magnitude));
 
-            if (angle * Mathf.Rad2Deg <= .1f)
+            if (angle * Mathf.Rad2Deg <= .0001f)
             {
                 return false;
             }
@@ -175,11 +180,11 @@ namespace TestJob
             switch (rotationAxis)
             {
                 case 1:
-                    speed = (float)angle * Mathf.Rad2Deg < 5f ? 2f : m_cannonTurningSpeedVertical;
+                    speed = (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedVertical;
                     objectToRotate.Rotate((speed * clockwise * Time.deltaTime), .0f, .0f);
                     break;
                 case 2:
-                    speed = (float)angle * Mathf.Rad2Deg < 5f ? 2f : m_cannonTurningSpeedHorizontal;
+                    speed = (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedHorizontal;
                     objectToRotate.Rotate(.0f, (speed * clockwise * Time.deltaTime), .0f);
                     break;
             }
