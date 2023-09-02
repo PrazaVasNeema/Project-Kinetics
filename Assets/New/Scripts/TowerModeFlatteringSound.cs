@@ -13,17 +13,19 @@ namespace TestJob
         private Vector3[] m_targetsPositions = { Vector3.zero, Vector3.zero };
         private float m_targetsSpeedCheckDelta = .05f;
 
-        public override Vector3 CalculateTargetingPosition(Vector3 aInterceptorPos, float aInterceptorSpeed)
+        public override Vector3? CalculateTargetingPosition(Vector3 aInterceptorPos, float aInterceptorSpeed)
         {
             if (m_target != null)
             {
                 float? angle = CalculateAngle(aInterceptorPos, aInterceptorSpeed, true);
-                Vector3 targetDir = m_target.transform.position - aInterceptorPos;
-                Vector3 m_returnVector = new Vector3(targetDir.x, Mathf.Tan((float)angle * Mathf.Deg2Rad) * targetDir.magnitude, targetDir.z);
-                return m_returnVector;
+                if (angle != null)
+                {
+                    Vector3 targetDir = m_target.transform.position - aInterceptorPos;
+                    Vector3 m_returnVector = new Vector3(targetDir.x, Mathf.Tan((float)angle * Mathf.Deg2Rad) * targetDir.magnitude, targetDir.z);
+                    return m_returnVector;
+                }
             }
-            else
-                return Vector3.zero;
+            return null;
         }
 
         float? CalculateAngle(Vector3 aInterceptorPos, float aInterceptorSpeed, bool low)

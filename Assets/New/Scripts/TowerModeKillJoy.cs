@@ -13,7 +13,7 @@ namespace TestJob
         private Vector3[] m_targetsPositions = { Vector3.zero, Vector3.zero };
         private float m_targetsSpeedCheckDelta = .05f;
 
-        public override Vector3 CalculateTargetingPosition(Vector3 aInterceptorPos, float aInterceptorSpeed)
+        public override Vector3? CalculateTargetingPosition(Vector3 aInterceptorPos, float aInterceptorSpeed)
         {
             if (m_target != null)
             {
@@ -24,7 +24,7 @@ namespace TestJob
                 return interceptionPoint;
             }
             else
-                return Vector3.zero;
+                return null;
         }
 
         public Vector3 CalculateInterceptCourse(Vector3 aInterceptorPos, float aInterceptorSpeed)

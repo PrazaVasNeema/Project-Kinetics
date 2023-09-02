@@ -31,7 +31,7 @@ namespace TestJob
 
         private float m_lastTimeChecked;
         private float m_lastTimeCheckedInterval = 1 / 60;
-        private Vector3 m_preferablePosition = Vector3.zero;
+        private Vector3? m_preferablePosition;
 
         private float m_fireProjectileCooldown = 2f;
         private float m_fireProjectileLastTime = 0f;
@@ -67,14 +67,17 @@ namespace TestJob
                 m_lastTimeChecked = Time.time;
                 m_preferablePosition = GetCurrentActiveAIModule().CalculateTargetingPosition(m_shootingPoint.position, projectileAcceleration);
             }
-            if (!(RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, m_preferablePosition, 2) || RotateObjectTowardsTarget(m_cannonVerticalTurning.transform, m_preferablePosition, 1)))
+
+            if (m_preferablePosition != null)
+            //if (!(RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, m_preferablePosition, 2) || RotateObjectTowardsTarget(m_cannonVerticalTurning.transform, m_preferablePosition, 1)))
             {
+                m_shootingPoint.transform.LookAt((Vector3)m_preferablePosition);
                 if (m_fireProjectileLastTime < Time.time - m_fireProjectileCooldown)
                 {
                     Fire();
                 }
+                m_targetAim.transform.position = (Vector3)m_preferablePosition;
             }
-            m_targetAim.transform.position = m_preferablePosition;
         }
 
         private void Fire()

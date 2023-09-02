@@ -38,7 +38,7 @@ namespace TestJob
             }
         }
 
-        public abstract Vector3 CalculateTargetingPosition(Vector3 aInterceptorPos, float aInterceptorSpeed);
+        public abstract Vector3? CalculateTargetingPosition(Vector3 aInterceptorPos, float aInterceptorSpeed);
 
         protected virtual void FindTarget()
         {
