@@ -70,15 +70,18 @@ namespace TestJob
             }
 
             if (m_preferablePosition != null)
-            //if (!(RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, m_preferablePosition, 2) || RotateObjectTowardsTarget(m_cannonVerticalTurning.transform, m_preferablePosition, 1)))
             {
-                m_shootingPoint.transform.LookAt((Vector3)m_preferablePosition);
-                if (m_fireProjectileLastTime < Time.time - m_fireProjectileCooldown)
+                if (!(RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, (Vector3)m_preferablePosition, 2) || RotateObjectTowardsTarget(m_cannonVerticalTurning.transform, (Vector3)m_preferablePosition, 1)))
                 {
-                    Fire();
+                    //m_shootingPoint.transform.LookAt((Vector3)m_preferablePosition);
+                    if (m_fireProjectileLastTime < Time.time - m_fireProjectileCooldown)
+                    {
+                        Fire();
+                    }
                 }
                 m_targetAim.transform.position = (Vector3)m_preferablePosition;
             }
+
         }
 
         private void Fire()

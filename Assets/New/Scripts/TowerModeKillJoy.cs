@@ -17,17 +17,20 @@ namespace TestJob
         {
             if (m_target != null)
             {
-                Vector3 IC = CalculateInterceptCourse(aInterceptorPos, aInterceptorSpeed);
-                IC.Normalize();
-                float interceptionTime1 = FindClosestPointOfApproach(m_target.position, m_targetsMovingVector, aInterceptorPos, IC * aInterceptorSpeed);
-                Vector3 interceptionPoint = m_target.position + m_targetsMovingVector * interceptionTime1;
-                return interceptionPoint;
+                Vector3? IC = CalculateInterceptCourse(aInterceptorPos, aInterceptorSpeed);
+                if (IC != null)
+                {
+                    Vector3 ICCast = (Vector3)IC;
+                    ICCast.Normalize();
+                    float interceptionTime1 = FindClosestPointOfApproach(m_target.position, m_targetsMovingVector, aInterceptorPos, ICCast * aInterceptorSpeed);
+                    Vector3 interceptionPoint = m_target.position + m_targetsMovingVector * interceptionTime1;
+                    return interceptionPoint;
+                }
             }
-            else
-                return null;
+            return null;
         }
 
-        public Vector3 CalculateInterceptCourse(Vector3 aInterceptorPos, float aInterceptorSpeed)
+        public Vector3? CalculateInterceptCourse(Vector3 aInterceptorPos, float aInterceptorSpeed)
         {
 
             Vector3 targetDir = m_target.position - aInterceptorPos;
@@ -38,7 +41,7 @@ namespace TestJob
             float targetDist2 = targetDir.sqrMagnitude;
             float d = (fDot1 * fDot1) - targetDist2 * (tSpeed2 - iSpeed2);
             if (d < 0.1f)  // negative == no possible course because the interceptor isn't fast enough
-                return Vector3.zero;
+                return null;
             float sqrt = Mathf.Sqrt(d);
             float S1 = (-fDot1 - sqrt) / targetDist2;
             float S2 = (-fDot1 + sqrt) / targetDist2;
