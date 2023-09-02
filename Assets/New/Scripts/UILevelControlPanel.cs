@@ -20,18 +20,21 @@ namespace TestJob
         [SerializeField] private Slider m_towerTurningSpeedVerticalSlider;
         [SerializeField] private Slider m_towerProjectileSpeedSlider;
         [SerializeField] private Slider m_targetSpeedSlider;
+        [SerializeField] private Slider m_towerFireRateSlider;
+        [SerializeField] private TMP_Dropdown m_cameraModeDropdown;
 
         private TowerManager m_currentSelectedTower;
 
         public void OnChangeParamsFun()
         {
             GameStateData gameStateData = new GameStateData(m_towerTurningSpeedHorizontalSlider.value, m_towerTurningSpeedVerticalSlider.value, 
-                m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value);
+                m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value, m_towerFireRateSlider.value, m_cameraModeDropdown.value);
 
             OnGameParamsChanged?.Invoke(this, new OnGameParamsChangedArgs
             {
-                gameStateData = new GameStateData(m_towerTurningSpeedHorizontalSlider.value, m_towerTurningSpeedVerticalSlider.value,
-                m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value)
+                gameStateData = gameStateData
+                //gameStateData = new GameStateData(m_towerTurningSpeedHorizontalSlider.value, m_towerTurningSpeedVerticalSlider.value,
+                //m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value)
             });
         }
 
@@ -41,6 +44,8 @@ namespace TestJob
             m_towerTurningSpeedVerticalSlider.value = gameStateData.towerTurningSpeedVertical;
             m_towerProjectileSpeedSlider.value = gameStateData.towerProjectileSpeed;
             m_targetSpeedSlider.value = gameStateData.targetSpeed;
+            m_towerFireRateSlider.value = gameStateData.towerFireRate;
+            m_cameraModeDropdown.value = gameStateData.cameraMode;
         }
     }
 

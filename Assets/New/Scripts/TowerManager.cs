@@ -36,11 +36,12 @@ namespace TestJob
         private float m_fireProjectileCooldown = 2f;
         private float m_fireProjectileLastTime = 0f;
 
-        public void SetParams(float cannonTurningSpeedHorizontal, float cannonTurningSpeedVertical, float projectileAcceleration)
+        public void SetParams(float cannonTurningSpeedHorizontal, float cannonTurningSpeedVertical, float projectileAcceleration, float towerFireRate)
         {
             m_cannonTurningSpeedHorizontal = cannonTurningSpeedHorizontal;
             m_cannonTurningSpeedVertical = cannonTurningSpeedVertical;
             m_projectileAcceleration = projectileAcceleration;
+            m_fireProjectileCooldown = 1 / towerFireRate;
         }
 
         private void Start()
@@ -116,7 +117,7 @@ namespace TestJob
 
             float angle = Mathf.Acos(dot / (tF.magnitude * fD.magnitude));
 
-            if (angle * Mathf.Rad2Deg <= 1f)
+            if (angle * Mathf.Rad2Deg <= .5f)
             {
                 return false;
             }

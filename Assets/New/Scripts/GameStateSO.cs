@@ -12,14 +12,6 @@ namespace TestJob
         [SerializeField] private GameStateData m_gameStateData;
         public GameStateData gamestateData => m_gameStateData;
 
-        public void SetGameStateData(float towerTurningSpeedHorizontal, float towerTurningSpeedVertical, float towerProjectileSpeed, float targetSpeedSlider)
-        {
-            m_gameStateData.towerTurningSpeedHorizontal = towerTurningSpeedHorizontal;
-            m_gameStateData.towerTurningSpeedVertical = towerTurningSpeedVertical;
-            m_gameStateData.towerProjectileSpeed = towerProjectileSpeed;
-            m_gameStateData.targetSpeed = targetSpeedSlider;
-        }
-
         public GameStateData GetGameStateData()
         {
             return m_gameStateData;
@@ -33,13 +25,17 @@ namespace TestJob
         public float towerTurningSpeedVertical;
         public float towerProjectileSpeed;
         public float targetSpeed;
+        public float towerFireRate;
+        public int cameraMode;
 
-        public GameStateData(float towerTurningSpeedHorizontal, float towerTurningSpeedVertical, float towerProjectileSpeed, float targetSpeed)
+        public GameStateData(float towerTurningSpeedHorizontal, float towerTurningSpeedVertical, float towerProjectileSpeed, float targetSpeed, float towerFireRate, int cameraMode)
         {
             this.towerTurningSpeedHorizontal = towerTurningSpeedHorizontal;
             this.towerTurningSpeedVertical = towerTurningSpeedVertical;
             this.towerProjectileSpeed = towerProjectileSpeed;
             this.targetSpeed = targetSpeed;
+            this.towerFireRate = towerFireRate;
+            this.cameraMode = cameraMode;
         }
     }
 }
