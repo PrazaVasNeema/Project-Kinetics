@@ -56,7 +56,7 @@ namespace TestJob
             bool activeAIModeIsZero = activeAIMode == 0;
             m_projectilePrefab.useGravity = activeAIModeIsZero ? false : true;
             m_preciseKill = activeAIModeIsZero ? false: true;
-            m_aimPrecision = activeAIModeIsZero ? .1f : .0001f;
+            m_aimPrecision = activeAIModeIsZero ? 1f : .0001f;
         }
 
         private void Awake()
