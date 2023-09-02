@@ -109,12 +109,6 @@ namespace TestJob
             StartCoroutine(CheckTargetsSpeedCo());
         }
 
-        private void Update()
-        {
-            base.Update();
-
-        }
-
         private void FixedUpdate()
         {
             if (m_target != null)

@@ -15,7 +15,7 @@ namespace TestJob
 
         private float m_birthTime;
 
-        private void Awake()
+        private void Awake() 
         {
             m_birthTime = Time.time;
         }

@@ -6,15 +6,13 @@ using static UnityEngine.GraphicsBuffer;
 namespace TestJob
 {
 
-    public abstract class TowerModeAbstract : MonoBehaviour, IHasMeta
+    public abstract class TowerModeAbstract : MonoBehaviour
     {
         public enum State
         {
             Targeting,
             TargetLocked,
         }
-
-        [SerializeField] private MetaData m_metaData;
 
         [SerializeField] private float m_detectionRadius;
 
@@ -44,11 +42,6 @@ namespace TestJob
         {
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, m_detectionRadius, m_targetLayerMask);
             m_target = hitColliders.Length > 0 ? hitColliders[0].transform : null;
-        }
-
-        public MetaData GetMeta()
-        {
-            return m_metaData;
         }
     }
 

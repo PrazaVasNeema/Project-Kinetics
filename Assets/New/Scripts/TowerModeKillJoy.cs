@@ -78,16 +78,10 @@ namespace TestJob
         // Start is called before the first frame update
         void Start()
         {
-            Debug.Log("fdgfg");
             //m_targetsPositions = new Vector3[2];
             StartCoroutine(CheckTargetsSpeedCo());
         }
 
-        private void Update()
-        {
-            base.Update();
-
-        }
 
         private void FixedUpdate()
         {
