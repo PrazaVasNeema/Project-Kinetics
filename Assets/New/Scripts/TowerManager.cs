@@ -39,6 +39,8 @@ namespace TestJob
         private float m_fireProjectileCooldown = 2f;
         private float m_fireProjectileLastTime = 0f;
         private bool m_canShoot;
+        private bool m_preciseKill = false;
+        private float m_aimPrecision = .5f;
 
         public void SetParams(float cannonTurningSpeedHorizontal, float cannonTurningSpeedVertical, float projectileAcceleration, float towerFireRate, int activeAIMode)
         {
@@ -50,7 +52,11 @@ namespace TestJob
             m_towerModeList[m_currentActiveTowerAIModeID].enabled = false;
             m_currentActiveTowerAIModeID = activeAIMode;
             m_towerModeList[m_currentActiveTowerAIModeID].enabled = true;
-            m_projectilePrefab.useGravity = activeAIMode == 0 ? false : true;
+
+            bool activeAIModeIsZero = activeAIMode == 0;
+            m_projectilePrefab.useGravity = activeAIModeIsZero ? false : true;
+            m_preciseKill = activeAIModeIsZero ? false: true;
+            m_aimPrecision = activeAIModeIsZero ? .1f : .0001f;
         }
 
         private void Awake()
@@ -141,7 +147,7 @@ namespace TestJob
 
             float angle = Mathf.Acos(dot / (tF.magnitude * fD.magnitude));
 
-            if (angle * Mathf.Rad2Deg <= .0001f)
+            if (angle * Mathf.Rad2Deg <= m_aimPrecision)
             {
                 return false;
             }
@@ -180,11 +186,11 @@ namespace TestJob
             switch (rotationAxis)
             {
                 case 1:
-                    speed = (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedVertical;
+                    speed = m_preciseKill && (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedVertical;
                     objectToRotate.Rotate((speed * clockwise * Time.deltaTime), .0f, .0f);
                     break;
                 case 2:
-                    speed = (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedHorizontal;
+                    speed = m_preciseKill && (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedHorizontal;
                     objectToRotate.Rotate(.0f, (speed * clockwise * Time.deltaTime), .0f);
                     break;
             }
