@@ -26,12 +26,7 @@ namespace TestJob
             }
             Instance = this;
 
-            GameStateData gameStateData = m_gameStateSO.GetGameStateData();
-            m_uiLevelControlPanel.SetParams(gameStateData);
-            m_towerManager.SetParams(gameStateData.towerTurningSpeedHorizontal, gameStateData.towerTurningSpeedVertical, gameStateData.towerProjectileSpeed, gameStateData.towerFireRate, gameStateData.towerAIMode);
-            m_waypointFollower.SetParams(gameStateData.targetSpeed);
-            m_cameraController.SetParams(gameStateData.cameraMode);
-            m_cameraController.ChangeMainCameraTransform(gameStateData.targetSpeed);
+
         }
 
         private void OnDestroy()
@@ -41,6 +36,13 @@ namespace TestJob
 
         private void Start()
         {
+            GameStateData gameStateData = m_gameStateSO.GetGameStateData();
+            m_uiLevelControlPanel.SetParams(gameStateData);
+            m_towerManager.SetParams(gameStateData.towerTurningSpeedHorizontal, gameStateData.towerTurningSpeedVertical, gameStateData.towerProjectileSpeed, gameStateData.towerFireRate, gameStateData.towerAIMode);
+            m_waypointFollower.SetParams(gameStateData.targetSpeed);
+            m_cameraController.SetParams(gameStateData.cameraMode);
+            m_cameraController.ChangeMainCameraTransform(gameStateData.targetSpeed);
+
             m_uiLevelControlPanel.OnGameParamsChanged += M_uiLevelControlPanel_OnGameParamsChanged;
         }
 

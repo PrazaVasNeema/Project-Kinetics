@@ -8,6 +8,9 @@ namespace TestJob
 
     public class TowerManager : MonoBehaviour
     {
+        private const float HIGH_PRECISION_VALUE = .0001f;
+        private const float LOW_PRECISION_VALUE = .5f;
+
         public event EventHandler<bool> OnTargetingNotPossibleCheck;
 
         [Header("Logics")]
@@ -56,7 +59,7 @@ namespace TestJob
             bool activeAIModeIsZero = activeAIMode == 0;
             m_projectilePrefab.useGravity = activeAIModeIsZero ? false : true;
             m_preciseKill = activeAIModeIsZero ? false: true;
-            m_aimPrecision = activeAIModeIsZero ? .5f : .0001f;
+            m_aimPrecision = activeAIModeIsZero ? LOW_PRECISION_VALUE : HIGH_PRECISION_VALUE;
         }
 
         private void Awake()
