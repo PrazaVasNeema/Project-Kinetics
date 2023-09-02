@@ -128,7 +128,7 @@ namespace TestJob
 
             float angle = Mathf.Acos(dot / (tF.magnitude * fD.magnitude));
 
-            if (angle * Mathf.Rad2Deg <= .5f)
+            if (angle * Mathf.Rad2Deg <= .1f)
             {
                 return false;
             }
@@ -163,13 +163,16 @@ namespace TestJob
                     break;
             }
 
+            float speed;
             switch (rotationAxis)
             {
                 case 1:
-                    objectToRotate.Rotate((m_cannonTurningSpeedHorizontal * clockwise * Time.fixedDeltaTime), .0f, .0f);
+                    speed = (float)angle * Mathf.Rad2Deg < 5f ? 20f : m_cannonTurningSpeedVertical;
+                    objectToRotate.Rotate((speed * clockwise * Time.fixedDeltaTime), .0f, .0f);
                     break;
                 case 2:
-                    objectToRotate.Rotate(.0f, (m_cannonTurningSpeedHorizontal * clockwise * Time.fixedDeltaTime), .0f);
+                    speed = (float)angle * Mathf.Rad2Deg < 5f ? 20f : m_cannonTurningSpeedHorizontal;
+                    objectToRotate.Rotate(.0f, (speed * clockwise * Time.fixedDeltaTime), .0f);
                     break;
             }
             return true;

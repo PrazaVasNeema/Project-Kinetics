@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TestJob
 {
@@ -10,6 +11,7 @@ namespace TestJob
     {
         [SerializeField] private float m_maxLifeTime = 15;
         [SerializeField] private ParticleSystem m_kaboomEffect;
+        [SerializeField] private LayerMask m_activationLayerMask;
 
         private float m_birthTime;
 
@@ -26,7 +28,10 @@ namespace TestJob
 
         private void OnCollisionEnter(Collision collision)
         {
-            ActivateKaboom();
+            if ((m_activationLayerMask.value & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
+            {
+                ActivateKaboom();
+            }
         }
 
         private void ActivateKaboom()
