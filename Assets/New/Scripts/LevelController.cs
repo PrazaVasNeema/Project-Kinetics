@@ -14,9 +14,7 @@ namespace TestJob
         [SerializeField] private UILevelControlPanel m_uiLevelControlPanel;
         [SerializeField] private TowerManager m_towerManager;
         public TowerManager towerManager => m_towerManager;
-        // [SerializeField] private TowerManager m_target;
         [SerializeField] private GameStateSO m_gameStateSO;
-        public GameStateSO gameStateSO => m_gameStateSO;
         [SerializeField] private WaypointFollower m_waypointFollower;
         [SerializeField] private CinemachineVirtualCamera[] m_virtualCameraArray;
 
@@ -29,7 +27,7 @@ namespace TestJob
         {
             if (Instance != null)
             {
-                Debug.LogError("There is more than one player instance");
+                Debug.LogError("There is more than one LevelController instance");
             }
             Instance = this;
         }

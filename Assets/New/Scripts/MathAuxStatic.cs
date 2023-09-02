@@ -8,10 +8,14 @@ namespace TestJob
     public static class MathAuxStatic
     {
 
+        public enum Axis
+        {
+            X, Y, Z, None
+        }
+
         public static Vector3 CalculateCentroid(Transform parentGameObject)
         {
             Vector3 centroid = Vector3.zero;
-
             if (parentGameObject.childCount > 0)
             {
                 Transform[] allChildren = parentGameObject.gameObject.GetComponentsInChildren<Transform>();
@@ -21,7 +25,6 @@ namespace TestJob
                 }
                 centroid /= (allChildren.Length);
             }
-
             return centroid;
         }
 
@@ -36,6 +39,47 @@ namespace TestJob
             return crossProd;
         }
 
+        public static Vector3 CalculateRelativeVectorChange(Vector3 dir, float multiplier, Axis ignoreAxis)
+        {
+            Vector3 newVector;
+            newVector = dir * multiplier;
+            ChangeAxisValue(ref newVector, ignoreAxis, GetVectorAxisValue(dir, ignoreAxis));
+            return newVector;
+        }
+
+        public static void ChangeAxisValue(ref Vector3 vectorToChange, Axis axis, float value)
+        {
+            switch (axis)
+            {
+                case Axis.X:
+                    vectorToChange = new Vector3(value, vectorToChange.y, vectorToChange.z);
+                    break;
+                case Axis.Y:
+                    vectorToChange = new Vector3(vectorToChange.x, value, vectorToChange.z);
+                    break;
+                case Axis.Z:
+                    vectorToChange = new Vector3(vectorToChange.z, vectorToChange.y, value);
+                    break;
+            }
+        }
+
+        public static float GetVectorAxisValue(Vector3 v,  Axis axis)
+        {
+            float axisValue = -1;
+            switch(axis)
+            {
+                case Axis.X:
+                    axisValue = v.x;
+                    break;
+                case Axis.Y:
+                    axisValue = v.y;
+                    break;
+                case Axis.Z:
+                    axisValue = v.z;
+                    break;
+            }
+            return axisValue;
+        }
     }
 
 }

@@ -46,8 +46,6 @@ namespace TestJob
             OnGameParamsChanged?.Invoke(this, new OnGameParamsChangedArgs
             {
                 gameStateData = gameStateData
-                //gameStateData = new GameStateData(m_towerTurningSpeedHorizontalSlider.value, m_towerTurningSpeedVerticalSlider.value,
-                //m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value)
             });
         }
 

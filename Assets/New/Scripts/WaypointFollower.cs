@@ -64,8 +64,9 @@ namespace TestJob
         {
             foreach(WaypointData waypointData in m_waypointDataList)
             {
-                Vector3 newe = waypointData.initialPositionAccordingCentroid* m_objectSpeed *m_speedWeight;
-                waypointData.transform.position = new Vector3(newe.x, waypointData.initialY, newe.z);
+                waypointData.transform.position = MathAuxStatic.CalculateRelativeVectorChange(waypointData.initialPositionAccordingCentroid, m_objectSpeed * m_speedWeight, MathAuxStatic.Axis.Y);
+                //Vector3 newe = waypointData.initialPositionAccordingCentroid* m_objectSpeed *m_speedWeight;
+                //waypointData.transform.position = new Vector3(newe.x, waypointData.initialY, newe.z);
             }
         }
 
