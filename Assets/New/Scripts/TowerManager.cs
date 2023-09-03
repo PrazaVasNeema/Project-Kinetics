@@ -162,19 +162,22 @@ namespace TestJob
                         break;
                 }
                 float angle = Mathf.Acos(dotProduct / (tF.magnitude * fD.magnitude)) * Mathf.Rad2Deg;
-            //float test = m_cannonTurningStackCheck[rotationType].checkQueue.Dequeue();
-            //Debug.Log($"checkQueue = {test}, angle = {angle}");
-            if (m_cannonTurningStackCheck[rotationType].checkQueue.Dequeue() == angle)
-            //if (test == angle)
-                {
-                    angle = 0f;
-                }
-                m_cannonTurningStackCheck[rotationType].checkQueue.Enqueue(angle);
+
                 if (angle <= m_aimPrecision)
                 {
 
                     return false;
                 }
+
+            //float test = m_cannonTurningStackCheck[rotationType].checkQueue.Dequeue();
+            //Debug.Log($"checkQueue = {test}, angle = {angle}");
+            if (m_cannonTurningStackCheck[rotationType].checkQueue.Dequeue() == angle && angle < .5f)
+            //if (test == angle)
+            {
+                m_cannonTurningStackCheck[rotationType].checkQueue.Enqueue(angle);
+                return false;
+            }
+            m_cannonTurningStackCheck[rotationType].checkQueue.Enqueue(angle);
 
             //switch (rotationType)
             //{

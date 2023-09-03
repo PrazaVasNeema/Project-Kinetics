@@ -26,6 +26,7 @@ namespace TestJob
         [SerializeField] private TMP_Dropdown m_cameraModeDropdown;
         [SerializeField] private TMP_Dropdown m_towerAIModeDropdown;
         [SerializeField] private TMP_Text m_towerAIModeText;
+        [TextArea(4,4)]
         [SerializeField] private string[] m_towerAIModeDescritpions;
         [SerializeField] private GameObject m_cantShootAlert;
         [SerializeField] private Toggle m_tenXSpeedToogle;
