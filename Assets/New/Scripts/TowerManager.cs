@@ -10,6 +10,8 @@ namespace TestJob
     {
         private const float HIGH_PRECISION_VALUE = .0001f;
         private const float LOW_PRECISION_VALUE = .5f;
+        private const float PRECISION_KILL_REQUIRED_ANGLE_VALUE = 1f;
+        private const float PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE = .5f;
         private const int MAIN_TOWER_AI_MODE_INDEX = 0;
 
         enum RotationType
@@ -34,8 +36,8 @@ namespace TestJob
         private float m_cannonTurningSpeedVertical;
         private int m_currentActiveTowerAIModeID;
 
-        private float m_lastTimeChecked;
-        private float m_lastTimeCheckedInterval = 1 / 60;
+        private float m_lastTimeCheckedAI;
+        private float m_lastTimeCheckedAIInterval = 1 / 60;
         private Vector3? m_preferablePosition;
 
         private float m_fireProjectileCooldown = 2f;
@@ -53,19 +55,12 @@ namespace TestJob
             m_projectileAcceleration = projectileAcceleration;
             m_fireProjectileCooldown = 1 / towerFireRate;
 
-            m_towerModeList[m_currentActiveTowerAIModeID].enabled = false;
-            m_currentActiveTowerAIModeID = activeAIMode;
-            m_towerModeList[m_currentActiveTowerAIModeID].enabled = true;
-
-            bool activeAIModeIsZero = activeAIMode == MAIN_TOWER_AI_MODE_INDEX;
-            m_projectilePrefab.useGravity = activeAIModeIsZero ? false : true;
-            m_isPreciseKill = activeAIModeIsZero ? false: true;
-            m_aimPrecision = activeAIModeIsZero ? LOW_PRECISION_VALUE : HIGH_PRECISION_VALUE;
+            SetCurrentActiveAIMode(activeAIMode);
         }
 
         private void Awake()
         {
-            m_lastTimeChecked = Time.time;
+            m_lastTimeCheckedAI = Time.time;
             foreach (TowerModeAbstract towerMode in m_towerModeList)
             {
                 towerMode.SetTargetLayerMask(m_targetLayerMask);
@@ -75,15 +70,14 @@ namespace TestJob
 
         private void Update()
         {
-            if (m_lastTimeChecked < Time.time - m_lastTimeCheckedInterval)
+            if (m_lastTimeCheckedAI < Time.time - m_lastTimeCheckedAIInterval)
             {
-                m_lastTimeChecked = Time.time;
+                m_lastTimeCheckedAI = Time.time;
                 m_preferablePosition = GetCurrentActiveAIModule().CalculateTargetingPosition(m_shootingPoint.position, m_projectileAcceleration);
             }
             if (m_preferablePosition != null)
             {
                 m_canShoot = true;
-
                 if (RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, (Vector3)m_preferablePosition, RotationType.Horizontal))
                 {
                     m_canShoot = false;
@@ -171,11 +165,11 @@ namespace TestJob
             switch (rotationType)
             {
                 case RotationType.Vertical:
-                    speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedVertical;
+                    speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < PRECISION_KILL_REQUIRED_ANGLE_VALUE ? PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE : m_cannonTurningSpeedVertical;
                     objectToRotate.Rotate((speed * clockwise * Time.deltaTime), .0f, .0f);
                     break;
                 case RotationType.Horizontal:
-                    speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedHorizontal;
+                    speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < PRECISION_KILL_REQUIRED_ANGLE_VALUE ? PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE : m_cannonTurningSpeedHorizontal;
                     objectToRotate.Rotate(.0f, (speed * clockwise * Time.deltaTime), .0f);
                     break;
             }
@@ -185,6 +179,18 @@ namespace TestJob
         public TowerModeAbstract GetCurrentActiveAIModule()
         {
             return m_towerModeList[m_currentActiveTowerAIModeID];
+        }
+
+        public void SetCurrentActiveAIMode(int activeAIMode)
+        {
+            m_towerModeList[m_currentActiveTowerAIModeID].enabled = false;
+            m_currentActiveTowerAIModeID = activeAIMode;
+            m_towerModeList[m_currentActiveTowerAIModeID].enabled = true;
+
+            bool activeAIModeIsZero = activeAIMode == MAIN_TOWER_AI_MODE_INDEX;
+            m_projectilePrefab.useGravity = activeAIModeIsZero ? false : true;
+            m_isPreciseKill = activeAIModeIsZero ? false : true;
+            m_aimPrecision = activeAIModeIsZero ? LOW_PRECISION_VALUE : HIGH_PRECISION_VALUE;
         }
     }
 
