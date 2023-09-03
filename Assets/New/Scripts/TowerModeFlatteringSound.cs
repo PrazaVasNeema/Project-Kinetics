@@ -33,8 +33,8 @@ namespace TestJob
             Vector3 targetDir = m_target.transform.position - aInterceptorPos;
             float y = targetDir.y;
             targetDir.y = 0.0f;
-            float x = targetDir.magnitude - 1.0f;
-            float gravity = 9.8f;
+            float x = targetDir.magnitude;
+            float gravity = 9.81f;
             float sSqr = aInterceptorSpeed * aInterceptorSpeed;
             float underTheSqrRoot = (sSqr * sSqr) - gravity * (gravity * x * x + 2 * y * sSqr);
 

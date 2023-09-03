@@ -8,7 +8,7 @@ namespace TestJob
 
     public class TowerManager : MonoBehaviour
     {
-        private const float HIGH_PRECISION_VALUE = .0001f;
+        private const float HIGH_PRECISION_VALUE = .00001f;
         private const float LOW_PRECISION_VALUE = .5f;
         private const float PRECISION_KILL_REQUIRED_ANGLE_VALUE = 1f;
         private const float PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE = .5f;
@@ -124,8 +124,8 @@ namespace TestJob
             switch (rotationType)
             {
                 case RotationType.Vertical:
-                    MathAuxStatic.SetVectorAxisValue(ref tF, MathAuxStatic.Axis.X, 0f);
-                    MathAuxStatic.SetVectorAxisValue(ref fD, MathAuxStatic.Axis.X, 0f);
+                    //MathAuxStatic.SetVectorAxisValue(ref tF, MathAuxStatic.Axis.X, 0f);
+                    //MathAuxStatic.SetVectorAxisValue(ref fD, MathAuxStatic.Axis.X, 0f);
                     break;
                 case RotationType.Horizontal:
                     MathAuxStatic.SetVectorAxisValue(ref tF, MathAuxStatic.Axis.Y, 0f);
@@ -137,7 +137,7 @@ namespace TestJob
             switch (rotationType)
             {
                 case RotationType.Vertical:
-                    dot = tF.y * fD.y + tF.z * fD.z;
+                    dot = tF.x * fD.x + tF.y * fD.y + tF.z * fD.z;
                     break;
                 case RotationType.Horizontal:
                     dot = tF.x * fD.x + tF.z * fD.z;
@@ -156,11 +156,19 @@ namespace TestJob
             {
                 case RotationType.Vertical:
                     if (MathAuxStatic.CrossProduct(tF, fD).x < .0f)
+                    {
                         clockwise = -1;
-                    if (tF.x > fD.x)
-                        clockwise = -clockwise;
+                    }
+                    //if (tF.x > fD.x)
+                    //    clockwise = -clockwise;
                     if (tF.z > fD.z)
+                    {
                         clockwise = -clockwise;
+
+                    }
+
+
+
                     break;
                 case RotationType.Horizontal:
                     if (MathAuxStatic.CrossProduct(tF, fD).y < .0f)
@@ -199,6 +207,8 @@ namespace TestJob
             m_projectilePrefab.GetComponent<Projectile>().SetMaxLifeTime(activeAIModeIsMain ? PROJECTILE_LIFETIME_SHORT : PROJECTILE_LIFETIME_LONG);
             m_isPreciseKill = activeAIModeIsMain ? false : true;
             m_aimPrecision = activeAIModeIsMain ? LOW_PRECISION_VALUE : HIGH_PRECISION_VALUE;
+            //if (!activeAIModeIsMain)
+            //    Time.timeScale = 10f;
         }
     }
 
