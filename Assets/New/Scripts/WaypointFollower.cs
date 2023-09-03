@@ -52,7 +52,6 @@ namespace TestJob
 
         private void FixedUpdate()
         {
-            Debug.Log(Random.Range(0, m_waypointDataList.Count));
             if ((m_objectToMove.position - m_waypointDataList[m_currentWaypointIndex].transform.position).sqrMagnitude < 1f)
             {
                 m_currentWaypointIndex = m_isRandomMoving ? Random.Range(0, m_waypointDataList.Count) : ++m_currentWaypointIndex % m_waypointDataList.Count == 0 ? 0 : m_currentWaypointIndex;

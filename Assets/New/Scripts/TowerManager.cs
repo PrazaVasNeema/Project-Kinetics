@@ -27,12 +27,11 @@ namespace TestJob
             public Queue<float> checkQueue;
             public float turningSpeed;
 
-            public AngleCheck(float firstCheck, float secondCheck, float thirdCheck)
+            public AngleCheck(float firstCheck, float secondCheck)
             {
                 checkQueue = new Queue<float>();
                 checkQueue.Enqueue(firstCheck);
                 checkQueue.Enqueue(secondCheck);
-                checkQueue.Enqueue(thirdCheck);
 
             }
         }
@@ -87,8 +86,8 @@ namespace TestJob
                 }
                 m_projectileHolder = new GameObject(PROJECTILE_HOLDER_NAME);
 
-                m_cannonTurningStackCheck.Add(RotationType.Vertical, new AngleCheck(-1, 1, 0));
-                m_cannonTurningStackCheck.Add(RotationType.Horizontal, new AngleCheck(-1, 1, 0));
+                m_cannonTurningStackCheck.Add(RotationType.Vertical, new AngleCheck(-1, 1));
+                m_cannonTurningStackCheck.Add(RotationType.Horizontal, new AngleCheck(-1, 1));
             }
 
             private void FixedUpdate()
@@ -162,9 +161,11 @@ namespace TestJob
                         dotProduct = tF.x * fD.x + tF.z * fD.z;
                         break;
                 }
-
                 float angle = Mathf.Acos(dotProduct / (tF.magnitude * fD.magnitude)) * Mathf.Rad2Deg;
-                if (m_cannonTurningStackCheck[rotationType].checkQueue.Dequeue() == angle)
+            //float test = m_cannonTurningStackCheck[rotationType].checkQueue.Dequeue();
+            //Debug.Log($"checkQueue = {test}, angle = {angle}");
+            if (m_cannonTurningStackCheck[rotationType].checkQueue.Dequeue() == angle)
+            //if (test == angle)
                 {
                     angle = 0f;
                 }
@@ -175,17 +176,17 @@ namespace TestJob
                     return false;
                 }
 
-                //switch (rotationType)
-                //{
-                //    case RotationType.Vertical:
-                //        Debug.Log($"{RotationType.Vertical}: {angle.ToString("F10")}");
-                //        break;
-                //    case RotationType.Horizontal:
-                //        Debug.Log($"{RotationType.Horizontal}: {angle.ToString("F10")}");
-                //        break;
-                //}
+            //switch (rotationType)
+            //{
+            //    case RotationType.Vertical:
+            //        Debug.Log($"{RotationType.Vertical}: {angle.ToString("F10")}");
+            //        break;
+            //    case RotationType.Horizontal:
+            //        Debug.Log($"{RotationType.Horizontal}: {angle.ToString("F10")}");
+            //        break;
+            //}
 
-                int clockwise = 1;
+            int clockwise = 1;
                 switch (rotationType)
                 {
                     case RotationType.Vertical:
