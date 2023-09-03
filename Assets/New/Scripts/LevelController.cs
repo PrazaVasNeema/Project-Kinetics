@@ -28,8 +28,6 @@ namespace TestJob
                 Debug.LogError("There is more than one LevelController instance");
             }
             Instance = this;
-
-
         }
 
         private void OnDestroy()
