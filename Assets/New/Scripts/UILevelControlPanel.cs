@@ -26,6 +26,7 @@ namespace TestJob
         [SerializeField] private TMP_Text m_towerAIModeText;
         [SerializeField] private string[] m_towerAIModeDescritpions;
         [SerializeField] private GameObject m_cantShootAlert;
+        [SerializeField] private Toggle m_tenXSpeedToogle;
 
         private void Start()
         {
@@ -47,6 +48,7 @@ namespace TestJob
             {
                 gameStateData = gameStateData
             });
+            Time.timeScale = m_tenXSpeedToogle.isOn ? 10f : 1f;
         }
 
         public void SetParams(GameStateData gameStateData)
