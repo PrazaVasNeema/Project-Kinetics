@@ -10,7 +10,8 @@ namespace TestJob
     public class Projectile : MonoBehaviour
     {
         [SerializeField] private float m_maxLifeTime = 15;
-        [SerializeField] private ParticleSystem m_kaboomEffect;
+        [SerializeField] private ParticleSystem m_kaboomEffectHit;
+        [SerializeField] private ParticleSystem m_kaboomEffectMiss;
         [SerializeField] private LayerMask m_activationOnExitLayerMask;
         [SerializeField] private LayerMask m_activationOnEnterLayerMask;
 
@@ -24,14 +25,14 @@ namespace TestJob
         private void Update()
         {
             if (m_birthTime < Time.time - m_maxLifeTime)
-                ActivateKaboom();
+                ActivateKaboom(m_kaboomEffectHit);
         }
 
         private void OnCollisionEnter(Collision collision)
         {
             if ((m_activationOnEnterLayerMask.value & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
             {
-                ActivateKaboom();
+                ActivateKaboom(m_kaboomEffectHit);
             }
         }
 
@@ -39,13 +40,13 @@ namespace TestJob
         {
             if ((m_activationOnExitLayerMask.value & 1 << other.gameObject.layer) == 1 << other.gameObject.layer)
             {
-                Destroy(gameObject);
+                ActivateKaboom(m_kaboomEffectMiss);
             }
         }
 
-        private void ActivateKaboom()
+        private void ActivateKaboom(ParticleSystem kaboomEffect)
         {
-            ParticleSystem particleSystemSpawned = Instantiate(m_kaboomEffect, transform.position, transform.rotation);
+            ParticleSystem particleSystemSpawned = Instantiate(kaboomEffect, transform.position, transform.rotation);
             particleSystemSpawned.transform.SetParent(transform.parent);
             Destroy(gameObject);
         }
