@@ -8,10 +8,10 @@ namespace TestJob
 
     public class TowerManager : MonoBehaviour
     {
-        private const float HIGH_PRECISION_VALUE = .00001f;
+        private const float HIGH_PRECISION_VALUE = .00005f;
         private const float LOW_PRECISION_VALUE = .5f;
-        private const float PRECISION_KILL_REQUIRED_ANGLE_VALUE = 1f;
-        private const float PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE = .2f;
+        private const float PRECISION_KILL_REQUIRED_ANGLE_VALUE = 2f;
+        private const float PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE = .5f;
         private const float PROJECTILE_LIFETIME_SHORT = 10f;
         private const float PROJECTILE_LIFETIME_LONG = 30f;
         private const string PROJECTILE_HOLDER_NAME = "ProjectileHolderLifetime";
@@ -20,6 +20,19 @@ namespace TestJob
         enum RotationType
         {
             Vertical, Horizontal
+        }
+
+        private class AngleCheck
+        {
+            public Queue<float> m_checkQueue;
+
+            public AngleCheck(float firstCheck, float secondCheck, float thirdCheck)
+            {
+                m_checkQueue = new Queue<float>();
+                m_checkQueue.Enqueue(firstCheck);
+                m_checkQueue.Enqueue(secondCheck);
+                m_checkQueue.Enqueue(thirdCheck);
+            }
         }
 
         public event EventHandler<bool> OnTargetingNotPossibleCheck;
@@ -40,7 +53,7 @@ namespace TestJob
         private int m_currentActiveTowerAIModeID;
 
         private float m_lastTimeCheckedAI;
-        private float m_lastTimeCheckedAIInterval = 1 / 60;
+        private float m_lastTimeCheckedAIInterval = 1 / 30;
         private Vector3? m_preferablePosition;
 
         private float m_fireProjectileCooldown = 2f;
@@ -51,6 +64,7 @@ namespace TestJob
         private bool m_isPreciseKill = false;
         private float m_aimPrecision = .5f;
 
+        private Dictionary<RotationType, AngleCheck> m_cannonTurningStackCheck = new Dictionary<RotationType, AngleCheck>(); 
         private GameObject m_projectileHolder;
 
         public void SetParams(float cannonTurningSpeedHorizontal, float cannonTurningSpeedVertical, float projectileAcceleration, float towerFireRate, int activeAIMode)
@@ -72,6 +86,9 @@ namespace TestJob
                 towerMode.enabled = false;
             }
             m_projectileHolder = new GameObject(PROJECTILE_HOLDER_NAME);
+
+            m_cannonTurningStackCheck.Add(RotationType.Vertical, new AngleCheck(-1, 1, 0));
+            m_cannonTurningStackCheck.Add(RotationType.Horizontal, new AngleCheck(-1, 1, 0));
         }
 
         private void FixedUpdate()
@@ -84,14 +101,19 @@ namespace TestJob
             if (m_preferablePosition != null)
             {
                 m_canShoot = true;
+
+                string test = "";
                 if (RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, (Vector3)m_preferablePosition, RotationType.Horizontal))
                 {
                     m_canShoot = false;
+                    test += "R1";
                 }
                 if (RotateObjectTowardsTarget(m_cannonVerticalTurning.transform, (Vector3)m_preferablePosition, RotationType.Vertical))
                 {
                     m_canShoot = false;
+                    test += " R2";
                 }
+                if (!String.IsNullOrEmpty(test)) Debug.Log(test);
                 //m_shootingPoint.transform.LookAt((Vector3)m_preferablePosition);
 
                 if (m_canShoot)
@@ -144,10 +166,30 @@ namespace TestJob
                     break;
             }
 
-            float angle = Mathf.Acos(dot / (tF.magnitude * fD.magnitude));
-            if (angle * Mathf.Rad2Deg <= m_aimPrecision)
+            float angle = Mathf.Acos(dot / (tF.magnitude * fD.magnitude)) * Mathf.Rad2Deg;
+
+
+            if (m_cannonTurningStackCheck[rotationType].m_checkQueue.Dequeue() == angle)
             {
+                angle = 0f;
+            }
+
+            m_cannonTurningStackCheck[rotationType].m_checkQueue.Enqueue(angle);
+
+            if (angle <= m_aimPrecision)
+            {
+
                 return false;
+            }
+
+            switch (rotationType)
+            {
+                case RotationType.Vertical:
+                    Debug.Log($"{RotationType.Vertical}: {angle.ToString("F10")}");
+                    break;
+                case RotationType.Horizontal:
+                    Debug.Log($"{RotationType.Horizontal}: {angle.ToString("F10")}");
+                    break;
             }
 
             int clockwise = 1;
@@ -180,11 +222,11 @@ namespace TestJob
             switch (rotationType)
             {
                 case RotationType.Vertical:
-                    speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < PRECISION_KILL_REQUIRED_ANGLE_VALUE ? PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE : m_cannonTurningSpeedVertical;
+                    speed = m_isPreciseKill && (float)angle < PRECISION_KILL_REQUIRED_ANGLE_VALUE ? PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE : m_cannonTurningSpeedVertical;
                     objectToRotate.Rotate((speed * clockwise * Time.fixedDeltaTime), .0f, .0f);
                     break;
                 case RotationType.Horizontal:
-                    speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < PRECISION_KILL_REQUIRED_ANGLE_VALUE ? PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE : m_cannonTurningSpeedHorizontal;
+                    speed = m_isPreciseKill && (float)angle < PRECISION_KILL_REQUIRED_ANGLE_VALUE ? PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE : m_cannonTurningSpeedHorizontal;
                     objectToRotate.Rotate(.0f, (speed * clockwise * Time.fixedDeltaTime), .0f);
                     break;
             }
