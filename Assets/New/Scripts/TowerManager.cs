@@ -25,7 +25,7 @@ namespace TestJob
         public event EventHandler<bool> OnTargetingNotPossibleCheck;
 
         [Header("Logics")]
-        [SerializeField] private List<TowerModeAbstract> m_towerModeList;
+        [SerializeField] private List<AbstractTowerMode> m_towerModeList;
         [SerializeField] private Transform m_shootingPoint;
         [SerializeField] private Rigidbody m_projectilePrefab;
         [SerializeField] private LayerMask m_targetLayerMask;
@@ -66,7 +66,7 @@ namespace TestJob
         private void Awake()
         {
             m_lastTimeCheckedAI = Time.time;
-            foreach (TowerModeAbstract towerMode in m_towerModeList)
+            foreach (AbstractTowerMode towerMode in m_towerModeList)
             {
                 towerMode.SetTargetLayerMask(m_targetLayerMask);
                 towerMode.enabled = false;
@@ -183,7 +183,7 @@ namespace TestJob
             return true;
         }
 
-        public TowerModeAbstract GetCurrentActiveAIModule()
+        public AbstractTowerMode GetCurrentActiveAIModule()
         {
             return m_towerModeList[m_currentActiveTowerAIModeID];
         }

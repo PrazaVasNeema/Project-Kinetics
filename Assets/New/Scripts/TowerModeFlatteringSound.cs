@@ -7,7 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 namespace TestJob
 {
 
-    public class TowerModeFlatteringSound : TowerModeAbstract
+    public class TowerModeFlatteringSound : AbstractTowerMode
     {
         [SerializeField] private bool m_isLow;
 

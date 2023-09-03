@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 namespace TestJob
 {
 
-    public class TowerModeKillJoy : TowerModeAbstract
+    public class TowerModeKillJoy : AbstractTowerMode
     {
         private Vector3 m_targetsMovingVector;
         private Vector3 m_targetPrevPosition;

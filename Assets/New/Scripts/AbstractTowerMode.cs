@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 namespace TestJob
 {
 
-    public abstract class TowerModeAbstract : MonoBehaviour
+    public abstract class AbstractTowerMode : MonoBehaviour
     {
         [SerializeField] private float m_detectionRadius;
 
