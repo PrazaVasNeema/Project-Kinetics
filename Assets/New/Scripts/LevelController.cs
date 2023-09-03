@@ -40,7 +40,7 @@ namespace TestJob
             GameStateData gameStateData = m_gameStateSO.GetGameStateData();
             m_uiLevelControlPanel.SetParams(gameStateData);
             m_towerManager.SetParams(gameStateData.towerTurningSpeedHorizontal, gameStateData.towerTurningSpeedVertical, gameStateData.towerProjectileSpeed, gameStateData.towerFireRate, gameStateData.towerAIMode);
-            m_waypointFollower.SetParams(gameStateData.targetSpeed);
+            m_waypointFollower.SetParams(gameStateData.targetSpeed, gameStateData.isRandomMovement);
             m_cameraController.SetParams(gameStateData.cameraMode);
             m_cameraController.ChangeMainCameraTransform(gameStateData.targetSpeed);
 
@@ -56,7 +56,7 @@ namespace TestJob
         private void M_uiLevelControlPanel_OnGameParamsChanged(object sender, UILevelControlPanel.OnGameParamsChangedArgs e)
         {
             m_towerManager.SetParams(e.gameStateData.towerTurningSpeedHorizontal, e.gameStateData.towerTurningSpeedVertical, e.gameStateData.towerProjectileSpeed, e.gameStateData.towerFireRate, e.gameStateData.towerAIMode);
-            m_waypointFollower.SetParams(e.gameStateData.targetSpeed);
+            m_waypointFollower.SetParams(e.gameStateData.targetSpeed, e.gameStateData.isRandomMovement);
             m_waypointFollower.enabled = e.gameStateData.towerAIMode == 0 ? true : false;
             m_cameraController.SetParams(e.gameStateData.cameraMode);
             m_cameraController.ChangeMainCameraTransform(e.gameStateData.targetSpeed);

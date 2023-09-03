@@ -23,11 +23,13 @@ namespace TestJob
         private float m_objectSpeed;
         private List<WaypointData> m_waypointDataList;
         private int m_currentWaypointIndex;
+        private bool m_isRandomMoving;
 
-        public void SetParams(float speed)
+        public void SetParams(float speed, bool isRandomMoving)
         {
             m_objectSpeed = speed;
             SetNewWaypointsPositions();
+            m_isRandomMoving = isRandomMoving;
         }
 
         private void Awake ()
@@ -50,9 +52,10 @@ namespace TestJob
 
         private void FixedUpdate()
         {
+            Debug.Log(Random.Range(0, m_waypointDataList.Count));
             if ((m_objectToMove.position - m_waypointDataList[m_currentWaypointIndex].transform.position).sqrMagnitude < 1f)
             {
-                m_currentWaypointIndex = ++m_currentWaypointIndex % m_waypointDataList.Count == 0 ? 0 : m_currentWaypointIndex;
+                m_currentWaypointIndex = m_isRandomMoving ? Random.Range(0, m_waypointDataList.Count) : ++m_currentWaypointIndex % m_waypointDataList.Count == 0 ? 0 : m_currentWaypointIndex;
             }
             float t = Time.fixedDeltaTime * m_objectSpeed;
             m_objectToMove.position = Vector3.MoveTowards(m_objectToMove.position, m_waypointDataList[m_currentWaypointIndex].transform.position, t);

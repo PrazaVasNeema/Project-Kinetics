@@ -29,6 +29,7 @@ namespace TestJob
         [SerializeField] private string[] m_towerAIModeDescritpions;
         [SerializeField] private GameObject m_cantShootAlert;
         [SerializeField] private Toggle m_tenXSpeedToogle;
+        [SerializeField] private Toggle m_isRandomMovementToogle;
 
         private void Start()
         {
@@ -55,7 +56,7 @@ namespace TestJob
         public void OnChangeParamsFun()
         {
             GameStateData gameStateData = new GameStateData(m_towerTurningSpeedHorizontalSlider.value, m_towerTurningSpeedVerticalSlider.value, 
-                m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value, m_towerFireRateSlider.value, m_cameraModeDropdown.value, m_towerAIModeDropdown.value);
+                m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value, m_towerFireRateSlider.value, m_cameraModeDropdown.value, m_towerAIModeDropdown.value, m_isRandomMovementToogle.isOn);
             m_towerAIModeText.text = m_towerAIModeDescritpions[gameStateData.towerAIMode];
 
             OnGameParamsChanged?.Invoke(this, new OnGameParamsChangedArgs

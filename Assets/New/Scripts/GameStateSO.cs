@@ -28,8 +28,9 @@ namespace TestJob
         public float towerFireRate;
         public int cameraMode;
         public int towerAIMode;
+        public bool isRandomMovement;
 
-        public GameStateData(float towerTurningSpeedHorizontal, float towerTurningSpeedVertical, float towerProjectileSpeed, float targetSpeed, float towerFireRate, int cameraMode, int towerAIMode)
+        public GameStateData(float towerTurningSpeedHorizontal, float towerTurningSpeedVertical, float towerProjectileSpeed, float targetSpeed, float towerFireRate, int cameraMode, int towerAIMode, bool isRandomMovement)
         {
             this.towerTurningSpeedHorizontal = towerTurningSpeedHorizontal;
             this.towerTurningSpeedVertical = towerTurningSpeedVertical;
@@ -39,6 +40,7 @@ namespace TestJob
             this.cameraMode = cameraMode;
             this.towerAIMode = towerAIMode;
             this.towerAIMode = towerAIMode;
+            this.isRandomMovement = isRandomMovement;
         }
     }
 }
