@@ -36,8 +36,14 @@ namespace TestJob
 
         private void ActivateKaboom()
         {
-            Instantiate(m_kaboomEffect, transform.position, transform.rotation);
+            ParticleSystem particleSystemSpawned = Instantiate(m_kaboomEffect, transform.position, transform.rotation);
+            particleSystemSpawned.transform.SetParent(transform.parent);
             Destroy(gameObject);
+        }
+
+        public void SetMaxLifeTime(float maxLifeTime)
+        {
+            m_maxLifeTime = maxLifeTime;
         }
     }
 
