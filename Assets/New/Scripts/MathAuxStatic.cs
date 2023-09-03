@@ -43,11 +43,11 @@ namespace TestJob
         {
             Vector3 newVector;
             newVector = dir * multiplier;
-            ChangeAxisValue(ref newVector, ignoreAxis, GetVectorAxisValue(dir, ignoreAxis));
+            SetVectorAxisValue(ref newVector, ignoreAxis, GetVectorAxisValue(dir, ignoreAxis));
             return newVector;
         }
 
-        public static void ChangeAxisValue(ref Vector3 vectorToChange, Axis axis, float value)
+        public static void SetVectorAxisValue(ref Vector3 vectorToChange, Axis axis, float value)
         {
             switch (axis)
             {

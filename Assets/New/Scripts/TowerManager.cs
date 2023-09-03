@@ -10,12 +10,17 @@ namespace TestJob
     {
         private const float HIGH_PRECISION_VALUE = .0001f;
         private const float LOW_PRECISION_VALUE = .5f;
+        private const int MAIN_TOWER_AI_MODE_INDEX = 0;
+
+        enum RotationType
+        {
+            Vertical, Horizontal
+        }
 
         public event EventHandler<bool> OnTargetingNotPossibleCheck;
 
         [Header("Logics")]
         [SerializeField] private List<TowerModeAbstract> m_towerModeList;
-
         [SerializeField] private Transform m_shootingPoint;
         [SerializeField] private Rigidbody m_projectilePrefab;
         [SerializeField] private LayerMask m_targetLayerMask;
@@ -24,15 +29,9 @@ namespace TestJob
         [SerializeField] private GameObject m_cannonHorizontalTurning;
         [SerializeField] private GameObject m_cannonVerticalTurning;
         [SerializeField] private GameObject m_targetAim;
-
-        private float m_projectileGravity;
-        public float projectileGravity => m_projectileGravity;
-        [SerializeField] private float m_projectileAcceleration = 100;
-        public float projectileAcceleration => m_projectileAcceleration;
+        
         private float m_cannonTurningSpeedHorizontal;
-        public float cannonTurningSpeedHorizontal => m_cannonTurningSpeedHorizontal;
         private float m_cannonTurningSpeedVertical;
-        public float cannonTurningSpeedVertical => m_cannonTurningSpeedVertical;
         private int m_currentActiveTowerAIModeID;
 
         private float m_lastTimeChecked;
@@ -41,8 +40,10 @@ namespace TestJob
 
         private float m_fireProjectileCooldown = 2f;
         private float m_fireProjectileLastTime = 0f;
+        private float m_projectileAcceleration = 100;
+
         private bool m_canShoot;
-        private bool m_preciseKill = false;
+        private bool m_isPreciseKill = false;
         private float m_aimPrecision = .5f;
 
         public void SetParams(float cannonTurningSpeedHorizontal, float cannonTurningSpeedVertical, float projectileAcceleration, float towerFireRate, int activeAIMode)
@@ -56,9 +57,9 @@ namespace TestJob
             m_currentActiveTowerAIModeID = activeAIMode;
             m_towerModeList[m_currentActiveTowerAIModeID].enabled = true;
 
-            bool activeAIModeIsZero = activeAIMode == 0;
+            bool activeAIModeIsZero = activeAIMode == MAIN_TOWER_AI_MODE_INDEX;
             m_projectilePrefab.useGravity = activeAIModeIsZero ? false : true;
-            m_preciseKill = activeAIModeIsZero ? false: true;
+            m_isPreciseKill = activeAIModeIsZero ? false: true;
             m_aimPrecision = activeAIModeIsZero ? LOW_PRECISION_VALUE : HIGH_PRECISION_VALUE;
         }
 
@@ -70,8 +71,6 @@ namespace TestJob
                 towerMode.SetTargetLayerMask(m_targetLayerMask);
                 towerMode.enabled = false;
             }
-            //m_currentActiveTowerAIModuleID = 0;
-            //m_towerModeList[m_currentActiveTowerAIModuleID].enabled = true;
         }
 
         private void Update()
@@ -79,17 +78,17 @@ namespace TestJob
             if (m_lastTimeChecked < Time.time - m_lastTimeCheckedInterval)
             {
                 m_lastTimeChecked = Time.time;
-                m_preferablePosition = GetCurrentActiveAIModule().CalculateTargetingPosition(m_shootingPoint.position, projectileAcceleration);
+                m_preferablePosition = GetCurrentActiveAIModule().CalculateTargetingPosition(m_shootingPoint.position, m_projectileAcceleration);
             }
             if (m_preferablePosition != null)
             {
                 m_canShoot = true;
 
-                if (RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, (Vector3)m_preferablePosition, 2))
+                if (RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, (Vector3)m_preferablePosition, RotationType.Horizontal))
                 {
                     m_canShoot = false;
                 }
-                if (RotateObjectTowardsTarget(m_cannonVerticalTurning.transform, (Vector3)m_preferablePosition, 1))
+                if (RotateObjectTowardsTarget(m_cannonVerticalTurning.transform, (Vector3)m_preferablePosition, RotationType.Vertical))
                 {
                     m_canShoot = false;
                 }
@@ -114,64 +113,47 @@ namespace TestJob
         }
 
         /// <summary>
-        /// Returns 1 if passed true or -1 if passed false.
-        /// rotationAxis:
-        /// 1 - Vertical,
-        /// 2 - Horizintal
+        /// Поворачивает objectToRotate в сторону targetToRotateTo по ориентации rotationType
         /// </summary>
-        /// <param name="objectToRotate">Parameter value to pass.</param>
-        /// <returns>Returns an integer based on the passed value.</returns>
-        private bool RotateObjectTowardsTarget(Transform objectToRotate, Vector3 targetToRotateTo, int rotationAxis)
+        /// <returns>Returns true при изменении rotation</returns>
+        private bool RotateObjectTowardsTarget(Transform objectToRotate, Vector3 targetToRotateTo, RotationType rotationType)
         {
             Vector3 tF = objectToRotate.forward;
             Vector3 fD = targetToRotateTo - objectToRotate.position;
-            switch (rotationAxis)
+            switch (rotationType)
             {
-                case 1:
-                    tF = new Vector3(0f, tF.y, tF.z);
-                    fD = new Vector3(0f, fD.y, fD.z);
+                case RotationType.Vertical:
+                    MathAuxStatic.SetVectorAxisValue(ref tF, MathAuxStatic.Axis.X, 0f);
+                    MathAuxStatic.SetVectorAxisValue(ref fD, MathAuxStatic.Axis.X, 0f);
                     break;
-                case 2:
-                    tF = new Vector3(tF.x, 0f, tF.z);
-                    fD = new Vector3(fD.x, 0f, fD.z);
+                case RotationType.Horizontal:
+                    MathAuxStatic.SetVectorAxisValue(ref tF, MathAuxStatic.Axis.Y, 0f);
+                    MathAuxStatic.SetVectorAxisValue(ref fD, MathAuxStatic.Axis.Y, 0f);
                     break;
             }
 
             float dot = -1;
-            switch (rotationAxis)
+            switch (rotationType)
             {
-                case 1:
+                case RotationType.Vertical:
                     dot = tF.y * fD.y + tF.z * fD.z;
                     break;
-                case 2:
+                case RotationType.Horizontal:
                     dot = tF.x * fD.x + tF.z * fD.z;
                     break;
             }
 
             float angle = Mathf.Acos(dot / (tF.magnitude * fD.magnitude));
-
             if (angle * Mathf.Rad2Deg <= m_aimPrecision)
             {
                 return false;
             }
 
-            //// Output the angle to the console
-            //Debug.Log("Angle rad: " + angle);
-
-            //Debug.Log("Angle: " + angle * Mathf.Rad2Deg);
-            //// Output Unitys angle
-            //Debug.Log("Unity Angle: " + Vector3.Angle(tF, fD));
-
-            // Draw a ray showing the tanks forward facing vector
-            Debug.DrawRay(this.transform.position, tF * 10f, Color.green, 2f);
-            // Draw a ray showing the vector to the fuel
-            Debug.DrawRay(this.transform.position, fD, Color.red, 2f);
-
             int clockwise = 1;
 
-            switch (rotationAxis)
+            switch (rotationType)
             {
-                case 1:
+                case RotationType.Vertical:
                     if (MathAuxStatic.CrossProduct(tF, fD).x < .0f)
                         clockwise = -1;
                     if (tF.x > fD.x)
@@ -179,21 +161,21 @@ namespace TestJob
                     if (tF.z > fD.z)
                         clockwise = -clockwise;
                     break;
-                case 2:
+                case RotationType.Horizontal:
                     if (MathAuxStatic.CrossProduct(tF, fD).y < .0f)
                         clockwise = -1;
                     break;
             }
 
             float speed;
-            switch (rotationAxis)
+            switch (rotationType)
             {
-                case 1:
-                    speed = m_preciseKill && (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedVertical;
+                case RotationType.Vertical:
+                    speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedVertical;
                     objectToRotate.Rotate((speed * clockwise * Time.deltaTime), .0f, .0f);
                     break;
-                case 2:
-                    speed = m_preciseKill && (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedHorizontal;
+                case RotationType.Horizontal:
+                    speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < 1f ? 0.5f : m_cannonTurningSpeedHorizontal;
                     objectToRotate.Rotate(.0f, (speed * clockwise * Time.deltaTime), .0f);
                     break;
             }
