@@ -16,6 +16,8 @@ namespace TestJob
             public GameStateData gameStateData;
         }
 
+        public event EventHandler<bool> OnTimeSpeedToogleChangeStatus;
+
         [SerializeField] private Slider m_towerTurningSpeedHorizontalSlider;
         [SerializeField] private Slider m_towerTurningSpeedVerticalSlider;
         [SerializeField] private Slider m_towerProjectileSpeedSlider;
@@ -38,19 +40,6 @@ namespace TestJob
             m_cantShootAlert.SetActive(!e);
         }
 
-        public void OnChangeParamsFun()
-        {
-            GameStateData gameStateData = new GameStateData(m_towerTurningSpeedHorizontalSlider.value, m_towerTurningSpeedVerticalSlider.value, 
-                m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value, m_towerFireRateSlider.value, m_cameraModeDropdown.value, m_towerAIModeDropdown.value);
-            m_towerAIModeText.text = m_towerAIModeDescritpions[gameStateData.towerAIMode];
-
-            OnGameParamsChanged?.Invoke(this, new OnGameParamsChangedArgs
-            {
-                gameStateData = gameStateData
-            });
-            Time.timeScale = m_tenXSpeedToogle.isOn ? 10f : 1f;
-        }
-
         public void SetParams(GameStateData gameStateData)
         {
             m_towerTurningSpeedHorizontalSlider.value = gameStateData.towerTurningSpeedHorizontal;
@@ -62,6 +51,24 @@ namespace TestJob
             m_towerAIModeDropdown.value = gameStateData.towerAIMode;
             m_towerAIModeText.text = m_towerAIModeDescritpions[gameStateData.towerAIMode];
         }
+
+        public void OnChangeParamsFun()
+        {
+            GameStateData gameStateData = new GameStateData(m_towerTurningSpeedHorizontalSlider.value, m_towerTurningSpeedVerticalSlider.value, 
+                m_towerProjectileSpeedSlider.value, m_targetSpeedSlider.value, m_towerFireRateSlider.value, m_cameraModeDropdown.value, m_towerAIModeDropdown.value);
+            m_towerAIModeText.text = m_towerAIModeDescritpions[gameStateData.towerAIMode];
+
+            OnGameParamsChanged?.Invoke(this, new OnGameParamsChangedArgs
+            {
+                gameStateData = gameStateData
+            });
+        }
+
+        public void OnTimeSpeedToogleChangeStatusFun()
+        {
+            OnTimeSpeedToogleChangeStatus?.Invoke(this, m_tenXSpeedToogle.isOn);
+        }
+
     }
 
 }
