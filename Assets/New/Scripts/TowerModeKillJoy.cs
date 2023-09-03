@@ -44,7 +44,7 @@ namespace TestJob
             if (S1 < .0001f)
             {
                 if (S2 < .0001f)
-                    return Vector3.zero;
+                    return null;
                 else
                     return (S2) * targetDir + m_targetsMovingVector;
             }
