@@ -11,7 +11,8 @@ namespace TestJob
     {
         [SerializeField] private float m_maxLifeTime = 15;
         [SerializeField] private ParticleSystem m_kaboomEffect;
-        [SerializeField] private LayerMask m_activationLayerMask;
+        [SerializeField] private LayerMask m_activationOnExitLayerMask;
+        [SerializeField] private LayerMask m_activationOnEnterLayerMask;
 
         private float m_birthTime;
 
@@ -28,7 +29,15 @@ namespace TestJob
 
         private void OnCollisionEnter(Collision collision)
         {
-            if ((m_activationLayerMask.value & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
+            if ((m_activationOnEnterLayerMask.value & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
+            {
+                ActivateKaboom();
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if ((m_activationOnExitLayerMask.value & 1 << other.gameObject.layer) == 1 << other.gameObject.layer)
             {
                 ActivateKaboom();
             }
