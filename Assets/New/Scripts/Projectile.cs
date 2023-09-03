@@ -39,7 +39,7 @@ namespace TestJob
         {
             if ((m_activationOnExitLayerMask.value & 1 << other.gameObject.layer) == 1 << other.gameObject.layer)
             {
-                ActivateKaboom();
+                Destroy(gameObject);
             }
         }
 

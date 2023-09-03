@@ -8,7 +8,7 @@ namespace TestJob
 
     public class TowerManager : MonoBehaviour
     {
-        private const float HIGH_PRECISION_VALUE = .00001f;
+        private const float HIGH_PRECISION_VALUE = .000005f;
         private const float LOW_PRECISION_VALUE = .5f;
         private const float PRECISION_KILL_REQUIRED_ANGLE_VALUE = 1f;
         private const float PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE = .5f;
