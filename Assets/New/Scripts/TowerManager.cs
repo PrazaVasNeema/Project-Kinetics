@@ -11,7 +11,7 @@ namespace TestJob
         private const float HIGH_PRECISION_VALUE = .00001f;
         private const float LOW_PRECISION_VALUE = .5f;
         private const float PRECISION_KILL_REQUIRED_ANGLE_VALUE = 1f;
-        private const float PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE = .5f;
+        private const float PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE = .2f;
         private const float PROJECTILE_LIFETIME_SHORT = 10f;
         private const float PROJECTILE_LIFETIME_LONG = 30f;
         private const string PROJECTILE_HOLDER_NAME = "ProjectileHolderLifetime";
@@ -74,7 +74,7 @@ namespace TestJob
             m_projectileHolder = new GameObject(PROJECTILE_HOLDER_NAME);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (m_lastTimeCheckedAI < Time.time - m_lastTimeCheckedAIInterval)
             {
@@ -181,11 +181,11 @@ namespace TestJob
             {
                 case RotationType.Vertical:
                     speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < PRECISION_KILL_REQUIRED_ANGLE_VALUE ? PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE : m_cannonTurningSpeedVertical;
-                    objectToRotate.Rotate((speed * clockwise * Time.deltaTime), .0f, .0f);
+                    objectToRotate.Rotate((speed * clockwise * Time.fixedDeltaTime), .0f, .0f);
                     break;
                 case RotationType.Horizontal:
                     speed = m_isPreciseKill && (float)angle * Mathf.Rad2Deg < PRECISION_KILL_REQUIRED_ANGLE_VALUE ? PRECISION_KILL_ANGLE_CHANGE_SPEED_VALUE : m_cannonTurningSpeedHorizontal;
-                    objectToRotate.Rotate(.0f, (speed * clockwise * Time.deltaTime), .0f);
+                    objectToRotate.Rotate(.0f, (speed * clockwise * Time.fixedDeltaTime), .0f);
                     break;
             }
             return true;
