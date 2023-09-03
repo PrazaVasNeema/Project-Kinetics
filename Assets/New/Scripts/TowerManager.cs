@@ -101,15 +101,9 @@ namespace TestJob
                 {
                     m_canShoot = true;
 
-                    // string test = "";
 
                     m_canShoot = !RotateObjectTowardsTarget(m_cannonHorizontalTurning.transform, (Vector3)m_preferablePosition, RotationType.Horizontal);
-                    // test += "R1";
-
                     m_canShoot = !RotateObjectTowardsTarget(m_cannonVerticalTurning.transform, (Vector3)m_preferablePosition, RotationType.Vertical);
-                    // test += " R2";
-                    
-                    // if (!String.IsNullOrEmpty(test)) Debug.Log(test);
                     //m_shootingPoint.transform.LookAt((Vector3)m_preferablePosition);
 
                     if (m_canShoot)
